@@ -1,0 +1,79 @@
+namespace: chaos-mesh
+targetRevision: "2.7.2"
+
+dashboard:
+  enabled: true
+  ingressUrl: chaos-dashboard.example.com
+  externalCert:
+    name: chaos-dashboard-tls
+    remoteSecretName: chaos-dashboard-tls
+    remoteSecretStore: kubernetes
+
+chaos-mesh:
+  timezone: "UTC"
+
+  controllerManager:
+    # For replica count 1 also disable the leader election
+    replicaCount: 1
+
+    # If enabled, only pods in the namespace annotated with `"chaos-mesh.org/inject": "enabled"` could be injected
+    enableFilterNamespace: false
+
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}
+    podAnnotations: {}
+
+    leaderElection:
+      enabled: false
+  
+  chaosDaemon:
+    podAnnotations: {}
+    serviceAccountAnnotations: {}
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}
+
+    # K3s specific configuration
+    runtime: containerd
+    socketPath: /run/k3s/containerd/containerd.sock
+
+  dashboard:
+    rootUrl: http://localhost:2333
+    replicaCount: 1
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}
+    podAnnotations: {}
+
+    service:
+      # Service annotations for the dashboard
+      annotations: {}
+      # Service type of the service created for exposing the dashboard
+      type: ClusterIP
+      # Set the `clusterIP` of the dashboard service if the type is `ClusterIP`
+      # clusterIP:
+      # Set the `nodePort` of the dashboard service if the type is `NodePort`
+      # nodePort:
+      # Set the `loadBalancerSourceRanges` of the dashboard service if the type is `LoadBalancer` and
+      # you want to specify the IP ranges that are allowed to access the dashboard service.
+      # loadBalancerSourceRanges: []
+
+    persistentVolume:
+      # If you are using SQLite as your DB for Chaos Dashboard, it is recommended to enable persistence.
+      # If enable, the chart will create a PersistenceVolumeClaim to store its state in. If you are
+      # using a DB other than SQLite, set this to false to avoid allocating unused storage.
+      # If set to false, Chaos Mesh will use an emptyDir instead, which is ephemeral.
+      enabled: true
+      size: 8Gi
+  
+  dnsServer:
+    # Enable DNS Server which required by DNSChaos
+    create: true
+    nodeSelector: {}
+    tolerations: []
+    podAnnotations: {}
+  
+  prometheus:
+    # Enable prometheus
+    create: false

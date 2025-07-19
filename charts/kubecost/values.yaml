@@ -1,0 +1,31 @@
+namespace: kubecost
+project: platform
+
+clusterName: k3s-cluster
+projectID: kubecost
+
+grafana:
+  fqdn: grafana.kubecost.svc.cluster.local
+  proxy: false
+  dashboards:
+    enabled: false
+    discoveryLabel: ""
+
+prometheus.fqdn: prometheus.kubecost.svc.cluster.local
+networkCost.enabled: true
+persistentVolume.enabled: false
+persistentVolume.size: 8Gi
+
+provisionReports:
+  enabled: false
+  dailyReport: false
+  monthlyReport: false
+  yearlyReports: false
+
+dashboard:
+  enabled: true
+  ingressName: kubecost.example.com
+  externalCert: 
+    name: kubecost-dash-tls
+    remoteSecretName: kubecost-dash-tls
+    remoteSecretStore: kubernetes
