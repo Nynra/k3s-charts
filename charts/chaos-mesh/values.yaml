@@ -1,20 +1,64 @@
-namespace: chaos-mesh
-targetRevision: "2.7.2"
+global:
+  commonAnnotations: {}
+  commonLabels: {}
+
+enabled: true
+enableExternalSecrets: true
+enableChaosMesh: true
+
+namespace: 
+  enabled: true
+  name: chaos-mesh
+  # Common labels and annotations to add to all resources in the chaos-mesh namespace
+  commonLabels: {}
+  commonAnnotations: {}
+
+project:
+  name: default
+
+argocd:
+  namespace: argocd
+  project: default
 
 dashboard:
   enabled: true
   ingressUrl: chaos-dashboard.example.com
-  externalCert:
-    name: chaos-dashboard-tls
-    remoteSecretName: chaos-dashboard-tls
-    remoteSecretStore: kubernetes
+  entrypoint: websecure
 
+  commonAnnotations: {}
+  commonLabels: {}
+
+  certName: chaos-dashboard-tls
+  externalCert:
+    enabled: true
+    secretName: chaos-dashboard-tls
+    secretStore: kubernetes
+    secretStoreType: ClusterSecretStore
+
+# Helm values for Chaos Mesh
+# https://github.com/chaos-mesh/chaos-mesh/blob/master/helm/chaos-mesh/values.yaml
+chaosMeshTargetRevision: "2.7.2"
 chaos-mesh:
   timezone: "UTC"
+
+  # Custom labels to add
+  customLabels: {}
+
+  # clusterScoped is whether chaos-mesh should manage kubernetes cluster wide chaos
+  # Also see rbac.create and controllerManager.serviceAccount
+  clusterScoped: true
+
+  # Creating rbac API Objects. Also see clusterScoped and controllerManager.serviceAccount
+  rbac:
+    create: true
 
   controllerManager:
     # For replica count 1 also disable the leader election
     replicaCount: 1
+
+    # targetNamespace only works with clusterScoped is false(namespace scoped mode).
+    # It means namespace which will be injected chaos
+    targetNamespace: chaos-mesh
 
     # If enabled, only pods in the namespace annotated with `"chaos-mesh.org/inject": "enabled"` could be injected
     enableFilterNamespace: false
@@ -24,12 +68,24 @@ chaos-mesh:
     affinity: {}
     podAnnotations: {}
 
+    # A list of controllers to enable. "*" enables all controllers by default.
+    enabledControllers:
+      - "*"
+    # A list of webhooks to enable. "*" enables all webhooks by default.
+    enabledWebhooks:
+      - "*"
+    podChaos:
+      podFailure:
+        # Custom Pause Container Image for Pod Failure Chaos
+        pauseImage: gcr.io/google-containers/pause:latest
+
     leaderElection:
       enabled: false
   
   chaosDaemon:
     podAnnotations: {}
     serviceAccountAnnotations: {}
+    priorityClassName: ""
     nodeSelector: {}
     tolerations: []
     affinity: {}
@@ -38,13 +94,42 @@ chaos-mesh:
     runtime: containerd
     socketPath: /run/k3s/containerd/containerd.sock
 
+    # Run chaos-daemon container in privileged mode. Processes in privileged containers
+    # are essentially equivalent to root on the host.
+    # If it is set to false, the following capabilities will be set. You can grant certain privileges
+    # to a process without granting all the privileges of the root user.
+    capabilities:
+      add:
+        - SYS_PTRACE
+        - NET_ADMIN
+        - NET_RAW
+        - MKNOD
+        - SYS_CHROOT
+        - SYS_ADMIN
+        - KILL
+        # CAP_IPC_LOCK is used to lock memory
+        - IPC_LOCK
+    privileged: true
+
   dashboard:
+    create: true
     rootUrl: http://localhost:2333
     replicaCount: 1
     nodeSelector: {}
     tolerations: []
     affinity: {}
     podAnnotations: {}
+
+    # securityMode requires user to provide credentials on Chaos Dashboard, instead of using chaos-dashboard service account
+    securityMode: true
+
+    # Custom priorityClassName for using pod priorities
+    priorityClassName: ""
+
+    # Optional, the secret name that has `DATABASE_DATASOURCE` defined.
+    # It's recommended to use a secret to store the database credentials.
+    databaseSecretName: ""
+    # rootUrl specify the base url for openid/oauth2 (like GCP Auth Integration) callback URL.
 
     service:
       # Service annotations for the dashboard
@@ -70,10 +155,57 @@ chaos-mesh:
   dnsServer:
     # Enable DNS Server which required by DNSChaos
     create: true
+
+    # Customized priorityClassName for chaos-dns-server
+    priorityClassName: ""
+    # Node labels for chaos-dns-server pod assignment
     nodeSelector: {}
+    # Toleration labels for chaos-dns-server pod assignment
     tolerations: []
+    # Pod annotations of chaos-dns-server
     podAnnotations: {}
   
   prometheus:
     # Enable prometheus
     create: false
+
+  webhook:
+    certManager:
+      # Setup the webhook using cert-manager
+      enabled: false
+
+    # It is recommended that admission webhooks should evaluate as quickly as possible (typically in milliseconds),
+    # since they add to API request latency. It is encouraged to use a small timeout for webhooks.
+    # https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/#timeouts
+    timeoutSeconds: 5
+    # FailurePolicy defines how unrecognized errors and timeout errors from the admission webhook are handled.
+    # https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/#failure-policy
+    FailurePolicy: Fail
+
+    CRDS:
+      - podchaos
+      - iochaos
+      - timechaos
+      - networkchaos
+      - kernelchaos
+      - stresschaos
+      - awschaos
+      - azurechaos
+      - gcpchaos
+      - dnschaos
+      - jvmchaos
+      - schedule
+      - workflow
+      - httpchaos
+      - blockchaos
+      - physicalmachinechaos
+      - physicalmachine
+      - statuscheck
+      - remotecluster
+
+  bpfki:
+    # Enable chaos-kernel
+    create: false
+
+  chaosDlv:
+    enable: false
