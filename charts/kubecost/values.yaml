@@ -1,8 +1,11 @@
-namespace: kubecost
-project: platform
+namespace:
+  enabled: true
+  name: kubecost
 
-clusterName: k3s-cluster
-projectID: kubecost
+argocd:
+  project: platform
+  clusterName: k3s-cluster
+  projectID: kubecost
 
 grafana:
   fqdn: grafana.kubecost.svc.cluster.local
