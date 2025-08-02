@@ -1,2 +1,2 @@
 # k3s-charts
-Collection of kubernetes addons that or not cluster critical
+Collection of charts for a k3s cluster managed by ArgoCD
