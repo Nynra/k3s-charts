@@ -69,8 +69,8 @@ rbac:
   enabled: false
 
   # Labels and annotation to add to all rbac resources
-  annotations: {}
-  labels: {}
+  commonAnnotations: {}
+  commonLabels: {}
 
   # List groups to authorize on this project
   groups: []
@@ -165,8 +165,8 @@ networkpolicy:
   enabled: false
 
   # Labels and annotation to add to all networkpolicy resources
-  annotations: {}
-  labels: {}
+  commonAnnotations: {}
+  commonLabels: {}
   
   # List group to create
   rules: []
@@ -190,11 +190,6 @@ networkpolicy:
   #     ingress:
   #     - from:
   #       - podSelector: {}
-  # # Custom configuration
-  # additionalLabels: |
-  #   label: "netpol"
-  # additionalAnnotations: |
-  #   annotations: "netpol"
 
 # Configure limitRange for project
 limits: 
@@ -202,8 +197,8 @@ limits:
   enabled: false
 
   # Labels and annotation to add to all limitRange resources
-  annotations: {}
-  labels: {}
+  commonAnnotations: {}
+  commonLabels: {}
 
   # Specification of the limitRange ressource
   rules: |
@@ -216,11 +211,6 @@ limits:
         max:
           cpu: 100m
           memory: 128Mi
-  # # Custom configuration
-  # additionalLabels: |
-  #   label: "limit"
-  # additionalAnnotations: |
-  #   annotations: "limit"
 
 # Configure quotas for project
 quotas: 
@@ -228,8 +218,8 @@ quotas:
   enabled: false
 
   # Labels and annotation to add to all quotas
-  labels: {}
-  annotations: {}
+  commonLabels: {}
+  commonAnnotations: {}
 
   # Specification of the quotas ressource
   rules: |
@@ -241,10 +231,6 @@ quotas:
       persistentvolumeclaims: "0"
       pods: "4"
       services: "2"
-  # additionalLabels: |
-  #   label: "quota"
-  # additionalAnnotations: |
-  #   annotations: "quota"
 
 # Configure serviceAccounts for project
 serviceAccounts:
@@ -252,8 +238,8 @@ serviceAccounts:
   enabled: false
 
   # Labels and annotation to add to all serviceAccounts
-  annotations: {}
-  labels: {}
+  commonAnnotations: {}
+  commonLabels: {}
 
   # List of the credentials to record
   list: []
@@ -265,11 +251,6 @@ serviceAccounts:
   #     - name: startx-registrycreds-quay
   #     # Name of the namespace where the secret reside (default is same project)
   #       namespace: default-project
-  # # Custom configuration
-  # additionalLabels: |
-  #   label: "sa"
-  # additionalAnnotations: |
-  #   annotations: "sa"
 
 externalSecrets:
   enabled: false
@@ -277,16 +258,16 @@ externalSecrets:
   enableSecrets: true
 
   # Labels and annotation to add to all external secrets
-  annotations: {}
-  labels: {}
+  commonAnnotations: {}
+  commonLabels: {}
 
   # Labels and annotation to add to all certificates
-  certAnnotations: {}
-  certLabels: {}
+  certCommonAnnotations: {}
+  certCommonLabels: {}
 
   # Labels and annotation to add to all secrets
-  secretAnnotations: {}
-  secretLabels: {}
+  secretCommonAnnotations: {}
+  secretCommonLabels: {}
 
   # List of certificates to create
   certificates: []

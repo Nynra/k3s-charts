@@ -9,20 +9,20 @@ metadata:
   labels:
     app.kubernetes.io/name: "{{ .id }}-networkpolicy"
     # NetworkPolicy labels
-    {{- if $.Values.networkpolicy.labels }}
-    {{- toYaml $.Values.networkpolicy.labels | nindent 4 }}
+    {{- if $.Values.networkpolicy.commonLabels }}
+    {{- toYaml $.Values.networkpolicy.commonLabels | nindent 4 }}
     {{- end }}
     # Global labels
-    {{- if $.Values.global.labels }}
-    {{- toYaml $.Values.global.labels | nindent 4 }}
+    {{- if $.Values.global.commonLabels }}
+    {{- toYaml $.Values.global.commonLabels | nindent 4 }}
     {{- end }}
   annotations:
-    {{- if $.Values.networkpolicy.annotations }}
-    {{- toYaml $.Values.networkpolicy.annotations | nindent 4 }}
+    {{- if $.Values.networkpolicy.commonAnnotations }}
+    {{- toYaml $.Values.networkpolicy.commonAnnotations | nindent 4 }}
     {{- end }}
     # Global annotations
-    {{- if $.Values.global.annotations }}
-    {{- toYaml $.Values.global.annotations | nindent 4 }}
+    {{- if $.Values.global.commonAnnotations }}
+    {{- toYaml $.Values.global.commonAnnotations | nindent 4 }}
     {{- end }}
 spec: 
   {{- .spec | nindent 2 }}
