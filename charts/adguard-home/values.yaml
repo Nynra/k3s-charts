@@ -1,0 +1,7 @@
+adguard-home: 
+  enabled: true 
+  # # -- (docs/service/README.md)
+  service: 
+    main: 
+      type: LoadBalancer
+      loadBalancerIP: ""

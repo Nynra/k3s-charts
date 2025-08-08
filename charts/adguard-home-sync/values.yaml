@@ -1,0 +1,97 @@
+global:
+  commonLabels: {}
+  commonAnnotations: {}
+
+# Enable the resources in this chart
+enabled: true
+
+# -- Credentials
+originCredentials:
+  enabled: true
+  secretName: adguardhome-sync-secret
+  storeName: kubernetes
+  storeType: SecretStore
+  properties:
+    ORIGIN_USERNAME: ""
+    ORIGIN_PASSWORD: ""
+
+replicaCredentials:
+  enabled: true
+  secretName: adguardhome-sync-replica-secret
+  storeName: kubernetes
+  storeType: SecretStore
+  properties:
+    REPLICA_USERNAME: ""
+    REPLICA_PASSWORD: ""
+
+config:
+  originAddress: "" 
+  replicaAddress: ""
+  autoSetupReplica: false
+  syncInterval: "*/10 * * * *"
+  features:     
+    # DNS
+    dnsAccessLists: true
+    dnsRewrites: true
+    dnsServerConfig: true
+    filters: true
+
+    # DHCP
+    dhcpServerConfig: false
+    dhcpStaticLeases: false
+    
+    # General
+    generalSettings: true
+    queryLogConfig: true
+    services: true
+    statsConfig: true
+    clientSettings: false
+
+adguardhome-sync:
+  enabled: true
+
+  TZ: "UTC"
+
+  # -- Resources
+  # Can be overruled per container
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1500Mi
+    requests:
+      cpu: 100m
+      memory: 250Mi
+
+  workload:
+    main:
+      podSpec:
+        containers:
+          main:
+            args:
+              - run
+            env:
+              CRON: {{ .Values.config.syncInterval | quote }}
+              FEATURES_CLIENT_SETTINGS: {{ .Values.config.features.clientSettings | quote }}
+              FEATURES_DHCP_SERVER_CONFIG: {{ .Values.config.features.dhcpServerConfig | quote }}
+              FEATURES_DHCP_STATIC_LEASES: {{ .Values.config.features.dhcpStaticLeases | quote }}
+              FEATURES_DNS_ACCESS_LISTS: {{ .Values.config.features.dnsAccessLists | quote }}
+              FEATURES_DNS_REWRITES: {{ .Values.config.features.dnsRewrites | quote }}
+              FEATURES_DNS_SERVER_CONFIG: {{ .Values.config.features.dnsServerConfig | quote }}
+              FEATURES_FILTERS: {{ .Values.config.features.filters | quote }}
+              FEATURES_GENERAL_SETTINGS: {{ .Values.config.features.generalSettings | quote }}
+              FEATURES_QUERY_LOG_CONFIG: {{ .Values.config.features.queryLogConfig | quote }}
+              FEATURES_SERVICES: {{ .Values.config.features.services | quote }}
+              FEATURES_STATS_CONFIG: {{ .Values.config.features.statsConfig | quote }}
+              ORIGIN_URL: {{ .Values.config.originAddress | quote }}
+              REPLICA_AUTO_SETUP: {{ .Values.config.autoSetupReplica | quote }}
+              REPLICA_INTERFACE_NAME: ""
+              REPLICA_URL: {{ .Values.config.replicaAddress | quote }}
+              RUN_ON_START: true
+              # The following are set using a secret
+              # ORIGIN_PASSWORD: password
+              # ORIGIN_USERNAME: username
+              # REPLICA_PASSWORD: password
+              # REPLICA_USERNAME: username
+            envFrom:
+              - secretRef:
+                  name: {{ .Values.credentials.secretName | quote }}

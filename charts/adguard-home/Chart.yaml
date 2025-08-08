@@ -1,10 +1,10 @@
 apiVersion: v2
-name: adguardHomeDnsApp
+name: adguard-home-app
 description: A Helm chart that deploys the AdGuard Home DNS application in a K3s cluster.
 type: application
 version: "0.0.1"
 dependencies:
-- name: adguardhome-sync
-  version: "0.7.8"
-  repository: oci://tccr.io/truecharts/adguardhome-sync
+- name: adguard-home
+  version: "12.2.1"
+  repository: oci://tccr.io/truecharts/adguard-home
   condition: adguardhome-sync.enabled
