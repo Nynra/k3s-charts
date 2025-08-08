@@ -8,10 +8,6 @@ metadata:
   namespace: {{- .Values.namespace.name | default .Chart.Name | quote }}
   labels:
     app.kubernetes.io/name: "{{ .id }}-networkpolicy"
-    # NetworkPolicy labels
-    {{- if $.Values.networkpolicy.commonLabels }}
-    {{- toYaml $.Values.networkpolicy.commonLabels | nindent 4 }}
-    {{- end }}
     # Global labels
     {{- if $.Values.global.commonLabels }}
     {{- toYaml $.Values.global.commonLabels | nindent 4 }}

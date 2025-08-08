@@ -10,23 +10,15 @@ metadata:
     argocd.argoproj.io/hook: PreSync
     argocd.argoproj.io/hook-delete-policy: HookFailed
     {{- end }}
-    # App Project annotations
-    {{- if .Values.appProject.commonAnnotations }}
-    {{- toYaml .Values.appProject.commonAnnotations | nindent 4 }}
-    {{- end }}
     # Global annotations
     {{- if .Values.global.commonAnnotations }}
     {{- toYaml .Values.global.commonAnnotations | nindent 4 }}
     {{- end }}
+  {{- if .Values.global.commonLabels }}
   labels:
-    # App Project labels
-    {{- if .Values.appProject.commonLabels }}
-    {{- toYaml .Values.appProject.commonLabels | nindent 4 }}
-    {{- end }}
     # Global labels
-    {{- if .Values.global.commonLabels }}
     {{- toYaml .Values.global.commonLabels | nindent 4 }}
-    {{- end }}
+  {{- end }}
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
@@ -76,10 +68,8 @@ spec:
     - group: ''
       kind: NetworkPolicy
     {{- end }}
-  {{- if .Values.appProject.monitoring }}
-  {{- if .Values.appProject.monitoring.enabled }}
+  {{- if .Values.bootstrapProject.warnOrphanedResources }}
   orphanedResources:
-    warn: {{ .Values.appProject.monitoring.warnOrphaned }}
-  {{- end }}
+    warn: true
   {{- end }}
 {{- end }}{{- end }}

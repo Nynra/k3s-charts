@@ -8,33 +8,27 @@ global:
 # If the chart instance should be created
 enabled: true
 
-# Project configuration
-namespace:
+# Argocd App Projects
+managementProject:
+  # Project the management resources will be deployed in
   enabled: false
-  name: k3s-test-namespace
-  hooked: false
-  commonLabels: {}
-  commonAnnotations: {}
+  name: k3s-test-management
 
-# Argocd App Project
-appProject:
+tenantProject:
+  # Project the tenant resources will be deployed in
   enabled: false
   name: k3s-test-project
   hooked: false
 
-  # Labels and annotations to add to the project
-  commonLabels: {}
-  commonAnnotations: {}
-
-  # List of the allowed namespaces for this project
-  namespaces: []
   # List of source repositories for this project
   sourceRepos: "*"
     # # Argocd Helm chart repository
     # - https://argoproj.github.io/argo-helm
+
   # List of the ArgoCD App Project destinations
   # By default only allows the namespace deployed in this chart, should be the same
-  # namespace as argocd is deployed in.
+  # namespace as argocd is deployed in. The server of the destination will also be used
+  # to deploy the tenant project
   # destinations:
   #   - namespace: argocd
   #     server: https://kubernetes.default.svc
@@ -54,14 +48,11 @@ appProject:
   # By default only blacklists ResourceQuotas, LimitRanges and NetworkPolicies
   # namespaceResourceBlacklist: []
 
-  # monitoring:
-  #   enabled: false
-  #   # Warn if the project contains orphaned resources
-  #   # This is useful to detect resources that are not managed by ArgoCD
-  #   # and could be deleted, use with caution as it could delete resources that are not managed by ArgoCD
-  #   # only give admin access to this project if you enable this
-  #   warnOrphaned: false 
-
+  # Warn if the project contains orphaned resources
+  # This is useful to detect resources that are not managed by ArgoCD
+  # and could be deleted, use with caution as it could delete resources that are not managed by ArgoCD
+  # only give admin access to this project if you enable this
+  warnOrphanedResources: false 
 
 # Configure RBAC for project
 rbac: 

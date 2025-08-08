@@ -4,20 +4,12 @@ apiVersion: v1
 metadata:
   name: "{{- .Values.namespace.name | default .Chart.Name -}}-quotas"
   namespace: {{- .Values.namespace.name | default .Chart.Name | quote }}
+  {{- if .Values.global.commonLabels }}
   labels:
-    # ResourceQuota labels
-    {{- if .Values.quotas.labels }}
-    {{- toYaml .Values.quotas.labels | nindent 4 }}
-    {{- end }}
     # Global labels
-    {{- if .Values.global.labels }}
-    {{- toYaml .Values.global.labels | nindent 4 }}
-    {{- end }}
+    {{- toYaml .Values.global.commonLabels | nindent 4 }}
+  {{- end }}
   annotations:
-    # ResourceQuota annotations
-    {{- if .Values.quotas.annotations }}
-    {{- toYaml .Values.quotas.annotations | nindent 4 }}
-    {{- end }}
     # Global annotations
     {{- if .Values.global.annotations }}
     {{- toYaml .Values.global.annotations | nindent 4 }}

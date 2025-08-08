@@ -14,19 +14,11 @@ metadata:
   {{- end }}
   labels:
     app.kubernetes.io/name: "{{ .id }}-role"
-    # Rbac labels
-    {{- if $.Values.rbac.labels }}
-    {{- toYaml $.Values.rbac.labels | nindent 4 }}
-    {{- end }}
     # Global labels
     {{- if $.Values.global.labels }}
     {{- toYaml $.Values.global.labels | nindent 4 }}
     {{- end }}
   annotations:
-    # Rbac annotations
-    {{- if $.Values.rbac.annotations }}
-    {{- toYaml $.Values.rbac.annotations | nindent 4 }}
-    {{- end }}
     # Global annotations
     {{- if $.Values.global.annotations }}
     {{- toYaml $.Values.global.annotations | nindent 4 }}

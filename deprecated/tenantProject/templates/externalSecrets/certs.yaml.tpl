@@ -7,31 +7,15 @@ metadata:
   namespace: {{ .namespace | default $.Values.namespace.name }}
   annotations:
     argocd.argoproj.io/sync-wave: "1"
-    # Individual annotations for the secret
-    {{- if .annotations }}
-    {{- toYaml .annotations | indent 4 }}
-    {{- end }}
-    # Cert annotations
-    {{- if $.Values.externalCertificates.annotations }}
-    {{ toYaml $.Values.externalCertificates.annotations | indent 4 }}
-    {{- end }}
     # Global annotations
     {{- if $.Values.global.annotations }}
     {{ toYaml $.Values.global.annotations | indent 4 }}
     {{- end }}
+  {{- if .Values.global.commonLabels }}
   labels:
-    # Individual labels for the secret
-    {{- if .labels }}
-    {{- toYaml .labels | indent 4 }}
-    {{- end }}
-    # Cert labels
-    {{- if $.Values.externalCertificates.labels }}
-    {{ toYaml $.Values.externalCertificates.labels | indent 4 }}
-    {{- end }}
     # Global labels
-    {{- if $.Values.global.labels }}
-    {{ toYaml $.Values.global.labels | indent 4 }}
-    {{- end }}
+    {{- toYaml .Values.global.commonLabels | nindent 4 }}
+  {{- end }}
 spec:
   secretStoreRef:
     kind: {{ .secretstore.kind | default "SecretStore" }}
