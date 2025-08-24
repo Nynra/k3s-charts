@@ -1,6 +1,34 @@
+global:
+  commonAnnotations: {}
+  commonLabels: {}
+
+enabled: true
+enableSetupUI: false
+
+networkPolicy:
+  enabled: false
+
+dashboard:
+  enabled: true
+  ingressUrl: "adguardhome.example.com"
+  middlewares:
+    - name: traefik-default-chain 
+      namespace: traefik
+  entrypoint: websecure
+  cert:
+    externalSecret:
+      enabled: false
+      secretName: "example-com-tls"
+      secretStore: "certs-vault"
+      secretStoreType: "ClusterSecretStore"
+    reflectedSecret:
+      enabled: true
+      originNamespace: "external-secrets"
+      originSecretName: "example-com-tls"
+  
+
 adguard-home: 
   enabled: true 
-  # # -- (docs/service/README.md)
   service: 
     main: 
       type: LoadBalancer

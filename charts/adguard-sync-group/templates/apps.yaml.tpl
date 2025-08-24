@@ -11,16 +11,13 @@ metadata:
     argocd.argoproj.io/sync-wave: "0"
 spec:
   project: default
-  sources:
-    - repoURL: https://github.com/Nynra/dev-k3s-gitops
-      targetRevision: HEAD
-      ref: gitopsDir
-    - repoURL: https://github.com/Nynra/k3s-argocd
-      path: chart
-      targetRevision: HEAD
-      helm:
-        valueFiles:
-          - $gitopsDir/configs/argocd-values.yaml
+  source:
+    repoURL: https://github.com/Nynra/k3s-argocd
+    path: chart
+    targetRevision: HEAD
+    helm:
+      valueFiles:
+        - $gitopsDir/configs/argocd-values.yaml
   destination:
     server: "https://kubernetes.default.svc"
     namespace: argocd

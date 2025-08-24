@@ -1,4 +1,4 @@
-# Kubecost
+# Kubecost & Kubeview
 
 <http://bluelight.co/blog/kubecost-installation-guide>
 

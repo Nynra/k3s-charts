@@ -3,18 +3,23 @@ apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: kubecost-ingress
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Release.Namespace | quote }}
   annotations:
     kubernetes.io/ingress.class: traefik-external
 spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`{{ .Values.dashboard.ingressUrl }}`)
+    - match: Host(`{{ .Values.dashboard.kubecostIngressUrl }}`)
       kind: Rule
+      middlewares:
+        {{- range .Values.dashboard.middlewares }}
+        - name: {{ .name }}
+          namespace: {{ .namespace }}
+        {{- end }}
       services:
         - name: kubecost-server
           port: 443
   tls:
-    secretName: {{ .Values.dashboard.externalCert.name }}
+    secretName: kubecost-dashboard-tls
 {{- end }}

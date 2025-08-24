@@ -1,0 +1,14 @@
+apiVersion: v2
+name: cost-management
+description: A Helm chart that deploys the Kubecost application in a K3s cluster.
+type: application
+version: "0.0.1"
+dependencies:
+  - name: kubecost
+    version: "2.8.2"
+    repository: "https://kubecost.github.io/cost-analyzer/"
+    condition: kubecost.enabled
+  - name: kubeview
+    version: "2.1.1"
+    repository: "https://code.benco.io/kubeview/deploy/helm"
+    condition: kubeview.enabled  
