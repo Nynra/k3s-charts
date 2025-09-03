@@ -145,7 +145,7 @@ external-dns:
         #       name: adguard-configuration
         #       key: url
         - name: ADGUARD_URL
-          value: http://{{ .Release.Name }}-adguard-home
+          value: http://adguard-dns-app-adguard-home
         - name: ADGUARD_USER
           valueFrom:
             secretKeyRef:
