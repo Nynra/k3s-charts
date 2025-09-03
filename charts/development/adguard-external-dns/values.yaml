@@ -111,49 +111,49 @@ external-dns:
     # - PTR
     # - MX
 
-  # provider:
-  #   # Webhook provider for adguard dns
-  #   name: webhook
-  #   webhook:
-  #     image:
-  #       repository: ghcr.io/muhlba91/external-dns-provider-adguard
-  #       tag: 9.1.0
-  #       pullPolicy: IfNotPresent
-  #     ports:
-  #       - containerPort: 8888
-  #         name: http
-  #       - containerPort: 8080
-  #         name: healthz
-  #     livenessProbe:
-  #       httpGet:
-  #         path: /healthz
-  #         port: healthz
-  #       initialDelaySeconds: 10
-  #       timeoutSeconds: 5
-  #     readinessProbe:
-  #       httpGet:
-  #         path: /healthz
-  #         port: healthz
-  #       initialDelaySeconds: 10
-  #       timeoutSeconds: 5
-  #     env:
-  #       - name: LOG_LEVEL
-  #         value: debug
-  #       - name: ADGUARD_URL
-  #         valueFrom:
-  #           secretKeyRef:
-  #             name: adguard-configuration
-  #             key: url
-  #       - name: ADGUARD_USER
-  #         valueFrom:
-  #           secretKeyRef:
-  #             name: adguard-configuration
-  #             key: user
-  #       - name: ADGUARD_PASSWORD
-  #         valueFrom:
-  #           secretKeyRef:
-  #             name: adguard-configuration
-  #             key: password
-  #       - name: DRY_RUN
-  #         value: "false" 
+  provider:
+    # Webhook provider for adguard dns
+    name: webhook
+    webhook:
+      image:
+        repository: ghcr.io/muhlba91/external-dns-provider-adguard:v9.1.0
+        tag: 9.1.0
+        pullPolicy: IfNotPresent
+      ports:
+        - containerPort: 8888
+          name: http
+        - containerPort: 8080
+          name: healthz
+      livenessProbe:
+        httpGet:
+          path: /healthz
+          port: healthz
+        initialDelaySeconds: 10
+        timeoutSeconds: 5
+      readinessProbe:
+        httpGet:
+          path: /healthz
+          port: healthz
+        initialDelaySeconds: 10
+        timeoutSeconds: 5
+      env:
+        - name: LOG_LEVEL
+          value: debug
+        - name: ADGUARD_URL
+          valueFrom:
+            secretKeyRef:
+              name: adguard-configuration
+              key: url
+        - name: ADGUARD_USER
+          valueFrom:
+            secretKeyRef:
+              name: adguard-configuration
+              key: user
+        - name: ADGUARD_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: adguard-configuration
+              key: password
+        - name: DRY_RUN
+          value: "false" 
         
