@@ -32,7 +32,7 @@ spec:
         {{- end }}
       {{- end }}
       services:
-        - name: "{{ .Release.Name }}-adguard-home"
+        - name: "main"
           kind: Service
   tls:
     secretName: adguard-dashboard-tls
