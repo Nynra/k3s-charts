@@ -116,8 +116,8 @@ external-dns:
     name: webhook
     webhook:
       image:
-        repository: ghcr.io/muhlba91/external-dns-provider-adguard:v9.1.0
-        tag: 9.1.0
+        repository: ghcr.io/muhlba91/external-dns-provider-adguard
+        tag: v9.1.0
         pullPolicy: IfNotPresent
       ports:
         - containerPort: 8888
