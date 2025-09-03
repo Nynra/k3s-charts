@@ -52,7 +52,7 @@ adguard-home:
       # type: LoadBalancer
       type: ClusterIP
       loadBalancerIP: ""
-      port: 8080
+      # port: 8080
       protocol: http
 
 external-dns:
@@ -73,6 +73,7 @@ external-dns:
 
   # Kubernetes resources to monitor for DNS entries.
   sources:
+    - crd
     - service
     # - ingress
     - traefik-proxy
@@ -83,7 +84,7 @@ external-dns:
   #logLevel: debug
 
   # Do not change the owner ID after initial deployment
-  #txtOwnerId: <replace with own id>
+  txtOwnerId: "TestOwner"
 
   # Limit possible target zones by domain suffixes.
   domainFilters: 
@@ -103,6 +104,12 @@ external-dns:
     - A
     - AAAA
     - CNAME
+    # Also supported are:
+    # - TXT
+    # - SRV
+    # - NS
+    # - PTR
+    # - MX
 
   provider:
     # Webhook provider for adguard dns
