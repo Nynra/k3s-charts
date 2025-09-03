@@ -139,11 +139,13 @@ external-dns:
       env:
         - name: LOG_LEVEL
           value: debug
+        # - name: ADGUARD_URL
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: adguard-configuration
+        #       key: url
         - name: ADGUARD_URL
-          valueFrom:
-            secretKeyRef:
-              name: adguard-configuration
-              key: url
+          value: http://{{ .Release.Name }}-adguard-home
         - name: ADGUARD_USER
           valueFrom:
             secretKeyRef:
