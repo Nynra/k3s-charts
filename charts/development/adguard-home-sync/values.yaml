@@ -8,27 +8,37 @@ enabled: true
 # -- Credentials
 originCredentials:
   enabled: true
-  secretName: adguardhome-sync-secret
-  storeName: kubernetes
-  storeType: SecretStore
-  properties:
-    ORIGIN_USERNAME: ""
-    ORIGIN_PASSWORD: ""
+  externalSecret:
+    enabled: false
+    storeName: kubernetes
+    storeType: SecretStore
+    properties:
+      ORIGIN_USERNAME: ""
+      ORIGIN_PASSWORD: ""
+  reflectedSecret:
+    enabled: true
+    originNamespace: cert-manager
+    originSecretName: goosebutnine-nl-tls
 
 replicaCredentials:
   enabled: true
-  secretName: adguardhome-sync-replica-secret
-  storeName: kubernetes
-  storeType: SecretStore
-  properties:
-    REPLICA_USERNAME: ""
-    REPLICA_PASSWORD: ""
+  externalSecret:
+    enabled: false
+    storeName: kubernetes
+    storeType: SecretStore
+    properties:
+      REPLICA_USERNAME: ""
+      REPLICA_PASSWORD: ""
+  reflectedSecret:
+    enabled: true
+    originNamespace: cert-manager
+    originSecretName: goosebutnine-nl-tls
 
 config:
   originAddress: "" 
   replicaAddress: ""
   autoSetupReplica: false
-  syncInterval: "*/10 * * * *"
+  syncInterval: "*/5 * * * *"
   features:     
     # DNS
     dnsAccessLists: true
@@ -70,22 +80,22 @@ adguardhome-sync:
             args:
               - run
             env:
-              CRON: {{ .Values.config.syncInterval | quote }}
-              FEATURES_CLIENT_SETTINGS: {{ .Values.config.features.clientSettings | quote }}
-              FEATURES_DHCP_SERVER_CONFIG: {{ .Values.config.features.dhcpServerConfig | quote }}
-              FEATURES_DHCP_STATIC_LEASES: {{ .Values.config.features.dhcpStaticLeases | quote }}
-              FEATURES_DNS_ACCESS_LISTS: {{ .Values.config.features.dnsAccessLists | quote }}
-              FEATURES_DNS_REWRITES: {{ .Values.config.features.dnsRewrites | quote }}
-              FEATURES_DNS_SERVER_CONFIG: {{ .Values.config.features.dnsServerConfig | quote }}
-              FEATURES_FILTERS: {{ .Values.config.features.filters | quote }}
-              FEATURES_GENERAL_SETTINGS: {{ .Values.config.features.generalSettings | quote }}
-              FEATURES_QUERY_LOG_CONFIG: {{ .Values.config.features.queryLogConfig | quote }}
-              FEATURES_SERVICES: {{ .Values.config.features.services | quote }}
-              FEATURES_STATS_CONFIG: {{ .Values.config.features.statsConfig | quote }}
-              ORIGIN_URL: {{ .Values.config.originAddress | quote }}
-              REPLICA_AUTO_SETUP: {{ .Values.config.autoSetupReplica | quote }}
+              CRON: "{{ .Values.config.syncInterval | quote }}"
+              FEATURES_CLIENT_SETTINGS: "{{ .Values.config.features.clientSettings | quote }}"
+              FEATURES_DHCP_SERVER_CONFIG: "{{ .Values.config.features.dhcpServerConfig | quote }}"
+              FEATURES_DHCP_STATIC_LEASES: "{{ .Values.config.features.dhcpStaticLeases | quote }}"
+              FEATURES_DNS_ACCESS_LISTS: "{{ .Values.config.features.dnsAccessLists | quote }}"
+              FEATURES_DNS_REWRITES: "{{ .Values.config.features.dnsRewrites | quote }}"
+              FEATURES_DNS_SERVER_CONFIG: "{{ .Values.config.features.dnsServerConfig | quote }}"
+              FEATURES_FILTERS: "{{ .Values.config.features.filters | quote }}"
+              FEATURES_GENERAL_SETTINGS: "{{ .Values.config.features.generalSettings | quote }}"
+              FEATURES_QUERY_LOG_CONFIG: "{{ .Values.config.features.queryLogConfig | quote }}"
+              FEATURES_SERVICES: "{{ .Values.config.features.services | quote }}"
+              FEATURES_STATS_CONFIG: "{{ .Values.config.features.statsConfig | quote }}"
+              ORIGIN_URL: "{{ .Values.config.originAddress | quote }}"
+              REPLICA_AUTO_SETUP: "{{ .Values.config.autoSetupReplica | quote }}"
               REPLICA_INTERFACE_NAME: ""
-              REPLICA_URL: {{ .Values.config.replicaAddress | quote }}
+              REPLICA_URL: "{{ .Values.config.replicaAddress | quote }}"
               RUN_ON_START: true
               # The following are set using a secret
               # ORIGIN_PASSWORD: password

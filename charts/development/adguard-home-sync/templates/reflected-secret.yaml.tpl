@@ -1,12 +1,12 @@
-{{ if .Values.enabled }}{{ if .Values.dashboard.cert.reflectedSecret.enabled }}
+{{ if .Values.enabled }}{{ if .Values.originCredentials.reflectedSecret.enabled }}
 apiVersion: v1
 kind: Secret
 metadata:
-  name: adguard-dashboard-tls
+  name: 
   namespace: {{ .Release.Namespace | quote }}
   annotations:
     argocd.argoproj.io/sync-wave: "0"
-    reflector.v1.k8s.emberstack.com/reflects: "{{ .Values.dashboard.cert.reflectedSecret.originNamespace }}/{{ .Values.dashboard.cert.reflectedSecret.originSecretName }}"
+    reflector.v1.k8s.emberstack.com/reflects: "{{ .Values.originCredentials.reflectedSecret.originNamespace }}/{{ .Values.originCredentials.reflectedSecret.originSecretName }}"
     # Global annotations
     {{- if .Values.global.commonAnnotations }}
       {{- toYaml .Values.global.commonAnnotations | nindent 4 }}
