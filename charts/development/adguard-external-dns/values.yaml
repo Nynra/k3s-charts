@@ -124,16 +124,27 @@ external-dns:
           name: http
         - containerPort: 8080
           name: healthz
+      # livenessProbe:
+      #   httpGet:
+      #     path: /healthz
+      #     port: healthz
+      #   initialDelaySeconds: 10
+      #   timeoutSeconds: 5
+      # readinessProbe:
+      #   httpGet:
+      #     path: /healthz
+      #     port: healthz
+      #   initialDelaySeconds: 10
+      #   timeoutSeconds: 5
       livenessProbe:
         httpGet:
-          path: /healthz
-          port: healthz
+          path: /
+          port: http
         initialDelaySeconds: 10
         timeoutSeconds: 5
       readinessProbe:
-        httpGet:
-          path: /healthz
-          port: healthz
+        tcpSocket:
+          port: http
         initialDelaySeconds: 10
         timeoutSeconds: 5
       env:
