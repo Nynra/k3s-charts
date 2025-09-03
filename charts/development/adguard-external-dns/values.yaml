@@ -47,8 +47,13 @@ adguard-home:
   enabled: true 
   service: 
     main: 
-      type: LoadBalancer
+      # Loadbalancer is usefull during setup or
+      # or if you want to expose to external services
+      # type: LoadBalancer
+      type: ClusterIP
       loadBalancerIP: ""
+      port: 8080
+      protocol: http
 
 external-dns:
   # Flag for the parent chart
