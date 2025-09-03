@@ -33,7 +33,7 @@ spec:
       {{- end }}
       services:
         - name: "main"
-          kind: Service
+          port: 10232
   tls:
     secretName: adguard-dashboard-tls
 {{- end }}{{- end }}
