@@ -113,7 +113,7 @@ external-dns:
 
   provider:
     # Webhook provider for adguard dns
-    name: adguard-webhook
+    name: webhook
     webhook:
       image:
         repository: ghcr.io/muhlba91/external-dns-provider-adguard
