@@ -32,7 +32,7 @@ spec:
         {{- end }}
       {{- end }}
       services:
-        - name: "main"
+        - name: "{{ .Release.Name }}-adguard-home"
           port: 10232
   tls:
     secretName: adguard-dashboard-tls
