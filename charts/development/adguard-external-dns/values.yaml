@@ -1,0 +1,142 @@
+global:
+  commonAnnotations: {}
+  commonLabels: {}
+  
+networkPolicy:
+  enabled: false
+
+adguardCredentials:
+  externalSecret:
+    enabled: false
+    secretName: adguard-configuration
+    secretStore: kubernetes
+    secretStoreType: SecretStore 
+    properties:
+      url: url
+      user: user
+      password: password
+  reflectedSecret:
+    enabled: true
+    originNamespace: adguard
+    originSecretName: adguard-configuration
+
+adguardDashboard:
+  enabled: true
+  ingressUrl: "adguardhome.example.com"
+  middlewares:
+    - name: traefik-default-chain 
+      namespace: traefik
+  entrypoint: websecure
+  cert:
+    externalSecret:
+      enabled: false
+      secretName: "example-com-tls"
+      secretStore: "certs-vault"
+      secretStoreType: "ClusterSecretStore"
+    reflectedSecret:
+      enabled: true
+      originNamespace: "external-secrets"
+      originSecretName: "example-com-tls"
+
+adguard-home: 
+  enabled: true 
+  service: 
+    main: 
+      type: LoadBalancer
+      loadBalancerIP: ""
+
+external-dns:
+  # Flag for the parent chart
+  enabled: true
+  resources: {}
+  nodeSelector: {}
+  affinity: {}
+  topologySpreadConstraints: []
+  tolerations: []
+
+  serviceMonitor:
+    enabled: false 
+
+  # if `true`, _ExternalDNS_ will run in a namespaced scope (`Role`` and `Rolebinding`` will be namespaced too).
+  # this means only ingresses and services in the deployment namespace will be detected
+  namespaced: false
+
+  # Kubernetes resources to monitor for DNS entries.
+  sources:
+    - service
+    # - ingress
+    - traefik-proxy
+
+  # How DNS records are synchronized between sources and providers; available values are `create-only`, `sync`, & `upsert-only`.
+  policy: sync  # create-only, sync, upsert-only,  default: "upsert-only"
+
+  #logLevel: debug
+
+  # Do not change the owner ID after initial deployment
+  #txtOwnerId: <replace with own id>
+
+  # Limit possible target zones by domain suffixes.
+  domainFilters: 
+    - example.com
+
+  # Intentionally exclude domains from being managed.
+  excludeDomains: []
+
+  # Filter resources queried for endpoints by label selector.
+  labelFilter:  # default: null
+
+  # Filter resources queried for endpoints by annotation selector.
+  annotationFilter:  # default: null
+
+  # Record types to manage (default: A, AAAA, CNAME)
+  managedRecordTypes:
+    - A
+    - AAAA
+    - CNAME
+
+  provider:
+    # Webhook provider for adguard dns
+    name: adguard-webhook
+    webhook:
+      image:
+        repository: ghcr.io/muhlba91/external-dns-provider-adguard
+        tag: 9.1.0
+        pullPolicy: IfNotPresent
+      ports:
+        - containerPort: 8888
+          name: http
+        - containerPort: 8080
+          name: healthz
+      livenessProbe:
+        httpGet:
+          path: /healthz
+          port: healthz
+        initialDelaySeconds: 10
+        timeoutSeconds: 5
+      readinessProbe:
+        httpGet:
+          path: /healthz
+          port: healthz
+        initialDelaySeconds: 10
+        timeoutSeconds: 5
+      env:
+        - name: LOG_LEVEL
+          value: debug
+        - name: ADGUARD_URL
+          valueFrom:
+            secretKeyRef:
+              name: adguard-configuration
+              key: url
+        - name: ADGUARD_USER
+          valueFrom:
+            secretKeyRef:
+              name: adguard-configuration
+              key: user
+        - name: ADGUARD_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: adguard-configuration
+              key: password
+        - name: DRY_RUN
+          value: "false" 
+        

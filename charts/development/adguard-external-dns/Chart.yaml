@@ -1,0 +1,14 @@
+apiVersion: v2
+name: adguard-external-dns
+description: A Helm chart that deploys externaldns with the adguard provider.
+type: application
+version: "0.0.1"
+dependencies:
+- name: adguard-home
+  version: 12.3.3
+  repository: oci://tccr.io/truecharts
+  condition: adguard-home.enabled
+- name: external-dns
+  version: 1.18.0
+  repository: https://kubernetes-sigs.github.io/external-dns/
+  condition: external-dns.enabled
