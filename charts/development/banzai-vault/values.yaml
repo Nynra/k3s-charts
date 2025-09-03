@@ -1,0 +1,21 @@
+enabled: true 
+
+vault-operator:
+  enabled: true
+  crds:
+    install: true
+
+  # -- The namespace where the operator watches for vault CR objects.
+  # If not defined all namespaces are watched.
+  watchNamespace: ""
+  syncPeriod: "1m"
+
+  crdAnnotations: {}
+  nodeSelector: {}
+  nodeSelector: {}
+  affinity: {}
+  priorityClassName: ""
+
+  monitoring:
+    serviceMonitor:
+      enabled: true

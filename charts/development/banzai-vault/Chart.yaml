@@ -1,0 +1,10 @@
+apiVersion: v2
+name: vault-app
+description: A Helm chart that deploys the Vault application in a K3s cluster.
+type: application
+version: "0.0.1"
+dependencies:
+- name: vault-operator
+  version: 0.0.0
+  repository: https://kubernetes-charts.banzaicloud.com
+  condition: vault-operator.enabled
