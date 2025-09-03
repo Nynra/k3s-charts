@@ -6,37 +6,23 @@ global:
 enabled: true
 
 # -- Credentials
-originCredentials:
-  enabled: true
-  externalSecret:
-    enabled: false
-    storeName: kubernetes
-    storeType: SecretStore
-    properties:
-      ORIGIN_USERNAME: ""
-      ORIGIN_PASSWORD: ""
+origin:
+  # Needs to match the secret in the workload container below
+  secretName: "origin-credentials"
   reflectedSecret:
     enabled: true
     originNamespace: cert-manager
     originSecretName: goosebutnine-nl-tls
 
-replicaCredentials:
-  enabled: true
-  externalSecret:
-    enabled: false
-    storeName: kubernetes
-    storeType: SecretStore
-    properties:
-      REPLICA_USERNAME: ""
-      REPLICA_PASSWORD: ""
+replica:
+  # Needs to match the secret in the workload container below
+  secretName: "replica-credentials"
   reflectedSecret:
     enabled: true
     originNamespace: cert-manager
     originSecretName: goosebutnine-nl-tls
 
-config:
-  originAddress: "" 
-  replicaAddress: ""
+syncConfig:
   autoSetupReplica: false
   syncInterval: "*/5 * * * *"
   features:     
@@ -80,28 +66,30 @@ adguardhome-sync:
             args:
               - run
             env:
-              CRON: "{{ .Values.config.syncInterval | quote }}"
-              FEATURES_CLIENT_SETTINGS: "{{ .Values.config.features.clientSettings | quote }}"
-              FEATURES_DHCP_SERVER_CONFIG: "{{ .Values.config.features.dhcpServerConfig | quote }}"
-              FEATURES_DHCP_STATIC_LEASES: "{{ .Values.config.features.dhcpStaticLeases | quote }}"
-              FEATURES_DNS_ACCESS_LISTS: "{{ .Values.config.features.dnsAccessLists | quote }}"
-              FEATURES_DNS_REWRITES: "{{ .Values.config.features.dnsRewrites | quote }}"
-              FEATURES_DNS_SERVER_CONFIG: "{{ .Values.config.features.dnsServerConfig | quote }}"
-              FEATURES_FILTERS: "{{ .Values.config.features.filters | quote }}"
-              FEATURES_GENERAL_SETTINGS: "{{ .Values.config.features.generalSettings | quote }}"
-              FEATURES_QUERY_LOG_CONFIG: "{{ .Values.config.features.queryLogConfig | quote }}"
-              FEATURES_SERVICES: "{{ .Values.config.features.services | quote }}"
-              FEATURES_STATS_CONFIG: "{{ .Values.config.features.statsConfig | quote }}"
-              ORIGIN_URL: "{{ .Values.config.originAddress | quote }}"
-              REPLICA_AUTO_SETUP: "{{ .Values.config.autoSetupReplica | quote }}"
+              CRON: "*/5 * * * *"
+              FEATURES_CLIENT_SETTINGS: "true"
+              FEATURES_DHCP_SERVER_CONFIG: "false"
+              FEATURES_DHCP_STATIC_LEASES: "false"
+              FEATURES_DNS_ACCESS_LISTS: "true"
+              FEATURES_DNS_REWRITES: "true"
+              FEATURES_DNS_SERVER_CONFIG: "true"
+              FEATURES_FILTERS: "true"
+              FEATURES_GENERAL_SETTINGS: "true"
+              FEATURES_QUERY_LOG_CONFIG: "true"
+              FEATURES_SERVICES: "true"
+              FEATURES_STATS_CONFIG: "true"
+              REPLICA_AUTO_SETUP: "false"
               REPLICA_INTERFACE_NAME: ""
-              REPLICA_URL: "{{ .Values.config.replicaAddress | quote }}"
               RUN_ON_START: true
               # The following are set using a secret
+              # REPLICA_URL: "{{ .Values.replica.address }}"
               # ORIGIN_PASSWORD: password
               # ORIGIN_USERNAME: username
+              # ORIGIN_URL: "{{ .Values.origin.address }}"
               # REPLICA_PASSWORD: password
               # REPLICA_USERNAME: username
             envFrom:
               - secretRef:
-                  name: {{ .Values.credentials.secretName | quote }}
+                  name: "origin-credentials"
+              - secretRef:
+                  name: "replica-credentials"

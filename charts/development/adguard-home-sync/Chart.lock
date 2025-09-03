@@ -1,0 +1,6 @@
+dependencies:
+- name: adguardhome-sync
+  repository: oci://tccr.io/truecharts
+  version: 9.3.4
+digest: sha256:ed3c127839cc65c5fe694ae8146d2cebf8fceb9d690e246377a49430f6e67f27
+generated: "2025-09-03T17:52:04.747564875+02:00"
