@@ -1,7 +1,12 @@
 global:
   commonAnnotations: {}
   commonLabels: {}
-  
+
+  # For adguard dns so it doesnt try to take 200Gi of storage
+  fallbackDefaults:
+    pvcSize: 2Gi
+    vctSize: 2Gi
+
 networkPolicy:
   enabled: false
 
