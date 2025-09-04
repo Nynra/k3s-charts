@@ -22,27 +22,7 @@ replica:
     originNamespace: cert-manager
     originSecretName: goosebutnine-nl-tls
 
-syncConfig:
-  autoSetupReplica: false
-  syncInterval: "*/5 * * * *"
-  features:     
-    # DNS
-    dnsAccessLists: true
-    dnsRewrites: true
-    dnsServerConfig: true
-    filters: true
-
-    # DHCP
-    dhcpServerConfig: false
-    dhcpStaticLeases: false
-    
-    # General
-    generalSettings: true
-    queryLogConfig: true
-    services: true
-    statsConfig: true
-    clientSettings: false
-
+# https://github.com/trueforge-org/truecharts/blob/master/charts/stable/adguardhome-sync/values.yaml
 adguardhome-sync:
   enabled: true
 
