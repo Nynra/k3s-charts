@@ -26,7 +26,7 @@ adguardCredentials:
     originSecretName: adguard-configuration
 
 adguardDashboard:
-  enabled: true
+  enabled: false
   ingressUrl: "adguardhome.example.com"
   middlewares:
     - name: traefik-default-chain 
