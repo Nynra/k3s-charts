@@ -82,7 +82,12 @@ external-dns:
   # How DNS records are synchronized between sources and providers; available values are `create-only`, `sync`, & `upsert-only`.
   policy: sync  # create-only, sync, upsert-only,  default: "upsert-only"
 
-  #logLevel: debug
+  rbac:
+    create: true
+    additionalPermissions: []
+
+  logLevel: info
+  logFormat: text
 
   # Do not change the owner ID after initial deployment
   txtOwnerId: "TestOwner"
@@ -150,4 +155,7 @@ external-dns:
 
       service:
         port: 8888
+
+  extraArgs:
+    - --webhook-provider-url=http://localhost:8888
         
