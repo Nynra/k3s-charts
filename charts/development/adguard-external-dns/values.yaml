@@ -126,10 +126,11 @@ external-dns:
         pullPolicy: IfNotPresent
       env:
         - name: ADGUARD_HOME_URL
-          valueFrom:
-            secretKeyRef:
-              name: adguard-configuration
-              key: url
+          value: "http://{{ .Release.Name }}-adguard-home.{{ .Release.Namespace}}:10232"
+          # valueFrom:
+          #   secretKeyRef:
+          #     name: adguard-configuration
+          #     key: url
         - name: ADGUARD_HOME_USER
           valueFrom:
             secretKeyRef:
