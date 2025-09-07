@@ -1,0 +1,225 @@
+global:
+  commonAnnotations: {}
+  commonLabels: {}
+
+  # For adguard dns so it doesnt try to take 200Gi of storage
+  fallbackDefaults:
+    pvcSize: 2Gi
+    vctSize: 2Gi
+
+networkPolicy:
+  enabled: false
+
+adguardCredentials:
+  externalSecret:
+    enabled: false
+    secretName: adguard-configuration
+    secretStore: kubernetes
+    secretStoreType: SecretStore 
+    properties:
+      url: url
+      user: user
+      password: password
+  reflectedSecret:
+    enabled: true
+    originNamespace: adguard
+    originSecretName: adguard-configuration
+
+adguardDashboard:
+  enabled: false
+  ingressUrl: "adguardhome.example.com"
+  middlewares:
+    - name: traefik-default-chain 
+      namespace: traefik
+  entrypoint: websecure
+  cert:
+    externalSecret:
+      enabled: false
+      secretName: "example-com-tls"
+      secretStore: "certs-vault"
+      secretStoreType: "ClusterSecretStore"
+    reflectedSecret:
+      enabled: true
+      originNamespace: "external-secrets"
+      originSecretName: "example-com-tls"
+
+# https://github.com/trueforge-org/truecharts/blob/master/charts/stable/adguard-home/values.yaml
+adguard-home: 
+  enabled: false 
+  service: 
+    main: 
+      # Loadbalancer is usefull during setup or
+      # or if you want to expose to external services
+      # type: LoadBalancer
+      type: ClusterIP
+      loadBalancerIP: ""
+      # port: 8080
+      protocol: http
+        
+external-dns: 
+  enabled: true 
+  sources:
+    - crd
+    - service 
+    # - ingress
+    - traefik-proxy
+
+  provider: webhook
+
+  # sidecars: []
+  sidecars:
+    - name: adguard-webhook
+      image: ghcr.io/muhlba91/external-dns-provider-adguard:v9.1.0
+      ports:
+        - containerPort: 8888
+          name: http
+        - containerPort: 8080
+          name: healthz
+      livenessProbe:
+        httpGet:
+          path: /healthz
+          port: healthz
+        initialDelaySeconds: 10
+        timeoutSeconds: 5
+      readinessProbe:
+        httpGet:
+          path: /healthz
+          port: healthz
+        initialDelaySeconds: 10
+        timeoutSeconds: 5
+      env:
+        - name: LOG_LEVEL
+          value: debug
+        - name: ADGUARD_URL
+          valueFrom:
+            secretKeyRef:
+              name: adguard-configuration
+              key: url
+        - name: ADGUARD_USER
+          valueFrom:
+            secretKeyRef:
+              name: adguard-configuration
+              key: user
+        - name: ADGUARD_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: adguard-configuration
+              key: password
+        - name: DRY_RUN
+          value: "false"  
+
+
+  # Namespace for discovery, blank means all namespaces
+  # (comma seperated list)
+  namespace: ""
+
+  # Watch only namespace used for the release
+  watchReleaseNamespace: false
+
+  # publishInternalServices Allow external-dns to publish DNS records for ClusterIP services
+  publishInternalServices: false
+  # publishHostIP Allow external-dns to publish host-ip for headless services
+  publishHostIP: false
+
+  # serviceTypeFilter The service types to take care about (default: all, options: ClusterIP, NodePort, LoadBalancer, ExternalName)
+  serviceTypeFilter: []
+
+  # Compatibility adaptations for Traefik
+  traefik:
+    # traefik.disableNew Disable listeners on Resources under traefik.io
+    disableNew: false
+
+  # domainFilters Limit possible target zones by domain suffixes (optional)
+  domainFilters: []
+  # excludeDomains Exclude subdomains (optional)
+  excludeDomains: []
+  #  regexDomainFilter Limit possible target zones by regex domain suffixes (optional)
+  # If regexDomainFilter is specified, domainFilters will be ignored
+  regexDomainFilter: ""
+  # regexDomainExclusion Exclude subdomains by using regex pattern (optional)
+  # If regexDomainFilter is specified, excludeDomains will be ignored and external-dns will use regexDomainExclusion even though regexDomainExclusion is empty
+  regexDomainExclusion: ""
+  # zoneNameFilters Filter target zones by zone domain (optional)
+  zoneNameFilters: []
+  # zoneIdFilters Limit possible target zones by zone id (optional)
+  zoneIdFilters: []
+  # annotationFilter Filter sources managed by external-dns via annotation using label selector (optional)
+  annotationFilter: ""
+  # labelFilter Select sources managed by external-dns using label selector (optional)
+  labelFilter: ""
+  # ingressClassFilters Filter sources managed by external-dns via IngressClass (optional)
+  ingressClassFilters: []
+  # managedRecordTypesFilters Filter record types managed by external-dns (optional)
+  managedRecordTypesFilters: []
+  # dryRun When enabled, prints DNS record changes rather than actually performing them (optional)
+  dryRun: false
+  # triggerLoopOnEvent When enabled, triggers run loop on create/update/delete events in addition to regular interval (optional)
+  triggerLoopOnEvent: false
+  # interval Interval update period to use
+  interval: "1m"
+  # logLevel Verbosity of the logs (options: panic, debug, info, warning, error, fatal, trace)
+  logLevel: info
+  # logFormat Which format to output logs in (options: text, json)
+  logFormat: text
+  # policy Modify how DNS records are synchronized between sources and providers (options: sync, upsert-only )
+  policy: upsert-only
+  # registry Registry method to use (options: txt, aws-sd, dynamodb, noop)
+  registry: "txt"
+  # txtPrefix When using the TXT registry, a prefix for ownership records that avoids collision with CNAME entries (optional)<CNAME record> (Mutual exclusive with txt-suffix)
+  txtPrefix: ""
+  # txtSuffix When using the TXT registry, a suffix for ownership records that avoids collision with CNAME entries (optional)<CNAME record>.suffix (Mutual exclusive with txt-prefix)
+  txtSuffix: ""
+  # txtNewFormatOnly When using the TXT registry, use only the new format for ownership records (optional)
+  txtNewFormatOnly: false
+  # txtOwnerId A name that identifies this instance of ExternalDNS. Currently used by registry types: txt & aws-sd (optional)
+  # But other registry types might be added in the future.
+  txtOwnerId: ""
+
+  # The value is evaluated as a template
+  topologySpreadConstraints: []
+  # podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  podAffinityPreset: ""
+  # podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  # Allowed values: soft, hard
+  podAntiAffinityPreset: soft
+  # Node affinity preset
+  nodeAffinityPreset:
+    # nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+    type: ""
+    # nodeAffinityPreset.key Node label key to match Ignored if `affinity` is set.
+    # E.g.
+    # key: "kubernetes.io/e2e-az-name"
+    key: ""
+    # nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set.
+    # E.g.
+    # values:
+    #   - e2e-az1
+    #   - e2e-az2
+    values: []
+  # affinity Affinity for pod assignment
+  # Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+  affinity: {}
+  # nodeSelector Node labels for pod assignment
+  nodeSelector: {}
+  # tolerations Tolerations for pod assignment
+  tolerations: []
+
+  # priorityClassName priorityClassName
+  priorityClassName: ""
+
+  # Options for the source type "crd"
+  crd:
+    # crd.create Install and use the integrated DNSEndpoint CRD
+    create: false
+    # crd.apiversion Sets the API version for the CRD to watch
+    apiversion: ""
+    # crd.kind Sets the kind for the CRD to watch
+    kind: ""
+
+  # Prometheus Exporter / Metrics
+  metrics:
+    # metrics.enabled Enable prometheus to access external-dns metrics endpoint
+    enabled: false
+    serviceMonitor:
+      # metrics.serviceMonitor.enabled Create ServiceMonitor object
+      enabled: false

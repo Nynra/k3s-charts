@@ -1,0 +1,114 @@
+# external-dns:
+#   # Flag for the parent chart
+#   enabled: true
+#   resources: {}
+#   nodeSelector: {}
+#   affinity: {}
+#   topologySpreadConstraints: []
+#   tolerations: []
+
+#   serviceMonitor:
+#     enabled: false 
+
+#   # if `true`, _ExternalDNS_ will run in a namespaced scope (`Role`` and `Rolebinding`` will be namespaced too).
+#   # this means only ingresses and services in the deployment namespace will be detected
+#   namespaced: false
+
+#   # Kubernetes resources to monitor for DNS entries.
+#   sources:
+#     - crd
+#     - service
+#     # - ingress
+#     - traefik-proxy
+
+#   # How DNS records are synchronized between sources and providers; available values are `create-only`, `sync`, & `upsert-only`.
+#   policy: sync  # create-only, sync, upsert-only,  default: "upsert-only"
+
+#   #logLevel: debug
+
+#   # Do not change the owner ID after initial deployment
+#   txtOwnerId: "TestOwner"
+
+#   # Limit possible target zones by domain suffixes.
+#   domainFilters: 
+#     - example.com
+
+#   # Intentionally exclude domains from being managed.
+#   excludeDomains: []
+
+#   # Filter resources queried for endpoints by label selector.
+#   labelFilter:  # default: null
+
+#   # Filter resources queried for endpoints by annotation selector.
+#   annotationFilter:  # default: null
+
+#   # Record types to manage (default: A, AAAA, CNAME)
+#   managedRecordTypes:
+#     - A
+#     - AAAA
+#     - CNAME
+#     # Also supported are:
+#     # - TXT
+#     # - SRV
+#     # - NS
+#     # - PTR
+#     # - MX
+
+#   provider:
+#     # Webhook provider for adguard dns
+#     name: webhook
+#     webhook:
+#       image:
+#         repository: ghcr.io/muhlba91/external-dns-provider-adguard
+#         tag: v9.1.0
+#         pullPolicy: IfNotPresent
+#       ports:
+#         - containerPort: 8888
+#           name: http
+#         - containerPort: 8080
+#           name: healthz
+#       # livenessProbe:
+#       #   httpGet:
+#       #     path: /healthz
+#       #     port: healthz
+#       #   initialDelaySeconds: 10
+#       #   timeoutSeconds: 5
+#       # readinessProbe:
+#       #   httpGet:
+#       #     path: /healthz
+#       #     port: healthz
+#       #   initialDelaySeconds: 10
+#       #   timeoutSeconds: 5
+#       livenessProbe:
+#         httpGet:
+#           path: /
+#           port: http
+#         initialDelaySeconds: 10
+#         timeoutSeconds: 5
+#       readinessProbe:
+#         tcpSocket:
+#           port: http
+#         initialDelaySeconds: 10
+#         timeoutSeconds: 5
+#       env:
+#         - name: LOG_LEVEL
+#           value: debug
+#         - name: ADGUARD_URL
+#           valueFrom:
+#             secretKeyRef:
+#               name: adguard-configuration
+#               key: url
+#         # - name: ADGUARD_URL
+#         #   value: http://adguard-dns-app-adguard-home
+#         - name: ADGUARD_USER
+#           valueFrom:
+#             secretKeyRef:
+#               name: adguard-configuration
+#               key: user
+#         - name: ADGUARD_PASSWORD
+#           valueFrom:
+#             secretKeyRef:
+#               name: adguard-configuration
+#               key: password
+#         - name: DRY_RUN
+#           value: "false" 

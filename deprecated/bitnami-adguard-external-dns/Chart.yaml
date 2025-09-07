@@ -8,11 +8,7 @@ dependencies:
   version: 12.3.3
   repository: oci://tccr.io/truecharts
   condition: adguard-home.enabled
-# - name: external-dns
-#   version: 9.0.3
-#   repository: oci://registry-1.docker.io/bitnamicharts
-#   condition: external-dns.enabled
 - name: external-dns
-  version: 1.18.0
-  repository: https://kubernetes-sigs.github.io/external-dns/
+  version: 9.0.3
+  repository: oci://registry-1.docker.io/bitnamicharts
   condition: external-dns.enabled
