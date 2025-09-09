@@ -6,7 +6,7 @@ metadata:
   name: {{ .Values.origin.secretName | quote }}
   namespace: {{ .Release.Namespace | quote }}
   annotations:
-    argocd.argoproj.io/sync-wave: "0"
+    argocd.argoproj.io/sync-wave: "1"
     reflector.v1.k8s.emberstack.com/reflects: "{{ .Values.origin.reflectedSecret.originNamespace }}/{{ .Values.origin.reflectedSecret.originSecretName }}"
     # Global annotations
     {{- if .Values.global.commonAnnotations }}
