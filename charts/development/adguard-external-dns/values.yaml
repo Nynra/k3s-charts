@@ -135,7 +135,7 @@ external-dns:
           valueFrom:
             secretKeyRef:
               name: adguard-configuration
-              key: user
+              key: username
         - name: ADGUARD_HOME_PASS
           valueFrom:
             secretKeyRef:
