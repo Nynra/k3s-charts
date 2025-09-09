@@ -62,14 +62,26 @@ adguardhome-sync:
               REPLICA_INTERFACE_NAME: ""
               RUN_ON_START: true
               # The following are set using a secret
-              # REPLICA_URL: "{{ .Values.replica.address }}"
+              REPLICA_URL: "example.com" # or an ip
               # ORIGIN_PASSWORD: password
               # ORIGIN_USERNAME: username
-              # ORIGIN_URL: "{{ .Values.origin.address }}"
+              ORIGIN_URL: "example.com" # or an ip
               # REPLICA_PASSWORD: password
               # REPLICA_USERNAME: username
             envFrom:
-              - secretRef:
+              - name: ORIGIN_USERNAME
+                secretRef:
                   name: "origin-credentials"
-              - secretRef:
+                  key: "username"
+              - name: ORIGIN_PASSWORD
+                secretRef:
+                  name: "origin-credentials"
+                  key: "password"
+              - name: REPLICA_USERNAME
+                secretRef:
                   name: "replica-credentials"
+                  key: "username"
+              - name: REPLICA_PASSWORD
+                secretRef:
+                  name: "replica-credentials"
+                  key: "password"
