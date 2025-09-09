@@ -1,4 +1,4 @@
-{{- if .Values.enabled }}{{- if .Values.dns-record.enabled }}
+{{- if .Values.enabled }}{{- if .Values.dnsRecord.enabled }}
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
 metadata:
@@ -8,23 +8,23 @@ metadata:
     {{- if .Values.global.commonAnnotations }} 
     {{- toYaml .Values.global.commonAnnotations | nindent 4 }} 
     {{- end }}
-    {{- if .Values.dns-record.annotations }}
-    {{- toYaml .Values.dns-record.annotations | nindent 4 }}
+    {{- if .Values.dnsRecord.annotations }}
+    {{- toYaml .Values.dnsRecord.annotations | nindent 4 }}
     {{- end }}
-  {{- if or .Values.dns-record.labels .Values.global.commonLabels }}
+  {{- if or .Values.dnsRecord.labels .Values.global.commonLabels }}
   labels:
     {{- if .Values.global.commonLabels }} 
     {{- toYaml .Values.global.commonLabels | nindent 4 }} 
     {{- end }}
-    {{- if .Values.dns-record.labels }}
-    {{- toYaml .Values.dns-record.labels | nindent 4 }}
+    {{- if .Values.dnsRecord.labels }}
+    {{- toYaml .Values.dnsRecord.labels | nindent 4 }}
     {{- end }}
   {{- end }}
 spec:
   endpoints:
-  - dnsName: {{ .Values.dns-record.url | quote }}
-    recordTTL: {{ .Values.dns-record.recordTTL | quote }}
+  - dnsName: {{ .Values.externalServer.url | quote }}
+    recordTTL: {{ .Values.dnsRecord.recordTTL | quote }}
     recordType: A
     targets:
-    - {{ .Values.external-server.ip | quote }}
+    - {{ .Values.externalServer.ip | quote }}
 {{- end }}{{- end }}

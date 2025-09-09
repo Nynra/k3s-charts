@@ -2,6 +2,8 @@ global:
   commonAnnotations: {}
   commonLabels: {}
 
+enabled: true
+
 ingress:
   enabled: true 
   url: "example.com"
@@ -9,26 +11,27 @@ ingress:
   middlewares:
     - name: traefik-default-chain
   cert:
-    enabled: true
-    originNamespace: "cert-manager"
-    originSecretName: "example.com-tls"
+    reflectedSecret:
+      enabled: true
+      originNamespace: "cert-manager"
+      originSecretName: "example.com-tls"
 
 # External-DNS crd
-dns-record:
+dnsRecord:
   # If enabled a DNS record manifest will be created
   # It still has to be applied to the cluster (not handled by this chart)
   enabled: true
-  url: "test.example-tutorial.com"
   recordTTL: 180
   # Labels and annotations for external-dns filters
   annotations: {}
   labels: {}
 
 # Parameters for the external server
-external-server:
+externalServer:
   tls:
     enabled: false
     skipVerify: false
   # IP address of the external server
+  url: "test.example-tutorial.com"
   ip: 192.168.1.30  # or some other ip
   port: 80

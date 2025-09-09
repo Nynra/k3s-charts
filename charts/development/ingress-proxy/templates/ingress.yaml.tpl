@@ -33,7 +33,7 @@ spec:
       {{- end }}
       services:
         - name: "{{ .Release.Name }}-service"
-          port: {{ .Values.external-server.port }}
+          port: {{ .Values.externalServer.port }}
   tls:
-    secretName: adguard-dashboard-tls
+    secretName: "{{ .Release.Name }}-tls"
 {{- end }}{{- end }}

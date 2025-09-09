@@ -15,7 +15,5 @@ metadata:
   {{- end }}
 spec:
   type: ExternalName
-  externalName: {{ .Values.dns-record.url | quote }}
-  # ports:
-  # - port: {{ .Values.external-server.port | quote }}
+  externalName: {{ .Values.externalServer.url }}
 {{- end }}
