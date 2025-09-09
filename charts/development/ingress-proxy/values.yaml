@@ -20,7 +20,7 @@ ingress:
 dnsRecord:
   # If enabled a DNS record manifest will be created
   # It still has to be applied to the cluster (not handled by this chart)
-  enabled: true
+  enabled: false
   recordTTL: 180
   # Labels and annotations for external-dns filters
   annotations: {}
@@ -35,3 +35,4 @@ externalServer:
   url: "test.example-tutorial.com"
   ip: 192.168.1.30  # or some other ip
   port: 80
+  protocol: http
