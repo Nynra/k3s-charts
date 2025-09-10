@@ -1,0 +1,10 @@
+apiVersion: v2
+name: jellyseerr-wrapper
+description: A Helm chart that deploys Jellyseerr with ingress.
+type: application
+version: "0.0.1"
+dependencies:
+- name: jellyseerr
+  version: "13.4.1"
+  repository: oci://tccr.io/truecharts
+  condition: jellyseerr.enabled

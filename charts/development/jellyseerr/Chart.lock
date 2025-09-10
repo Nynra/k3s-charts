@@ -1,0 +1,6 @@
+dependencies:
+- name: jellyseerr
+  repository: oci://tccr.io/truecharts
+  version: 13.4.1
+digest: sha256:acd1bbbc130a0b91e22943e66180fcb3bd66c35fe4d5de30e9bca255d5cfa798
+generated: "2025-09-11T00:03:01.538716181+02:00"

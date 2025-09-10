@@ -1,0 +1,10 @@
+apiVersion: v2
+name: tautulli-wrapper
+description: A Helm chart that deploys Tautulli with ingress.
+type: application
+version: "0.0.1"
+dependencies:
+- name: tautulli
+  version: "21.5.1"
+  repository: oci://tccr.io/truecharts
+  condition: tautulli.enabled

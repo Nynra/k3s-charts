@@ -1,0 +1,6 @@
+dependencies:
+- name: homarr
+  repository: oci://tccr.io/truecharts
+  version: 13.5.1
+digest: sha256:1b18c824f499c145310293deda7a4bf29a206d3c1b61bd21ceeb20b6a6a84970
+generated: "2025-09-10T23:45:40.136872463+02:00"

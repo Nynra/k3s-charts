@@ -1,0 +1,10 @@
+apiVersion: v2
+name: homarr-wrapper
+description: A Helm chart that deploys Homarr with ingress.
+type: application
+version: "0.0.1"
+dependencies:
+- name: homarr
+  version: "13.5.1"
+  repository: oci://tccr.io/truecharts
+  condition: homarr.enabled

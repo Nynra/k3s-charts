@@ -1,0 +1,6 @@
+dependencies:
+- name: tautulli
+  repository: oci://tccr.io/truecharts
+  version: 21.5.1
+digest: sha256:f46c1b5175abb9cc4c39ac016859e0fe89c19c197a727ea2b4e089ab53b1a4e3
+generated: "2025-09-11T00:07:31.847829315+02:00"
