@@ -55,7 +55,16 @@ adguard-home:
       loadBalancerIP: ""
       # port: 8080
       protocol: http
-        
+
+  # Can be overruled per container
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 75m
+      memory: 200Mi
+
 external-dns:
   # Flag for the parent chart
   enabled: true
