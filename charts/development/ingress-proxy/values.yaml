@@ -4,6 +4,23 @@ global:
 
 enabled: true
 
+quota:
+  enabled: true
+  # Specification of the quotas resource
+  rules: |
+    hard:
+      persistentvolumeclaims: "0"
+      pods: "0"
+
+networkPolicy:
+  enabled: false
+  ingress:
+    traefikNamespace: traefik
+    traefikPodSelector:
+      matchLabels:
+        app.kubernetes.io/name: traefik
+        app.kubernetes.io/instance: traefik
+
 ingress:
   enabled: true 
   url: "example.com"
