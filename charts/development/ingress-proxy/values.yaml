@@ -22,6 +22,8 @@ dnsRecord:
   # If enabled a DNS record manifest will be created
   # It still has to be applied to the cluster (not handled by this chart)
   enabled: false
+  # If content is an IP an A record will be created, if it's a hostname a CNAME record will be created
+  ip: 192.168.1.30
   recordTTL: 180
   # Labels and annotations for external-dns filters
   annotations: {}
@@ -34,6 +36,5 @@ externalServer:
     skipVerify: false
   # IP address of the external server
   url: "test.example-tutorial.com"
-  ip: 192.168.1.30  # or some other ip
   port: 80
   protocol: TCP

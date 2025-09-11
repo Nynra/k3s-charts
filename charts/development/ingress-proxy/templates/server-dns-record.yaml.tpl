@@ -26,5 +26,5 @@ spec:
     recordTTL: {{ .Values.dnsRecord.recordTTL | quote }}
     recordType: A
     targets:
-    - {{ .Values.externalServer.ip | quote }}
+    - {{ .Values.dnsRecord.ip | quote }}
 {{- end }}{{- end }}
