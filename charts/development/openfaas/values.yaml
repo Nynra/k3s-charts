@@ -1,0 +1,124 @@
+global:
+  commonLabels: {}
+  commonAnnotations: {}
+
+coreQuota:
+  enabled: false
+  # Specification of the quotas resource
+  rules: |
+    hard:
+      persistentvolumeclaims: "1"
+      pods: "1"
+
+functionsQuota:
+  enabled: false
+  # Specification of the quotas resource
+  rules: |
+    hard:
+      persistentvolumeclaims: "1"
+      pods: "1"
+
+networkPolicy:
+  enabled: true
+  ingress:
+    traefikNamespace: traefik
+    traefikPodSelector:
+      matchLabels:
+        app.kubernetes.io/name: traefik
+        app.kubernetes.io/instance: traefik
+
+dashboard:
+  enabled: true
+  ingressUrl: openfaas.example.com
+  middlewares:
+    - name: traefik-default-chain
+      namespace: traefik 
+
+  cert:
+    reflectedSecret:
+      enabled: true
+      originNamespace: cert-manager
+      originName: example-com-tls
+
+# https://github.com/openfaas/faas-netes/blob/master/chart/openfaas/values.yaml
+openfaas:
+  enabled: true
+
+  functionNamespace: openfaas-fn
+  openfaasPro: false
+
+  # set clusterRole: true for:
+  ## CPU/RAM metrics in OpenFaaS API
+  ## Multiple-namespace support
+  clusterRole: false
+
+  # Creates the Function/Profile CRDs, set to false if you are managing CRDs in another way
+  createCRDs: true
+
+  # serviceType for OpenFaaS gateway
+  serviceType: NodePort
+
+  operator:
+    create: true
+    leaderElection:
+      enabled: true
+
+  gateway:
+    replicas: 1
+
+  autoscaler:
+    enabled: true
+
+  dashboard:
+    enabled: false
+    publicURL: https://dashboard.example.com
+    # Name of signing key secret for sessions.
+    # Leave blank for development, see https://docs.openfaas.com/openfaas-pro/dashboard/ for production and staging.
+    signingKeySecret: ""
+
+  queueWorker:
+    replicas: 3
+
+  queueWorkerPro:
+    maxInflight: 50
+
+  queueMode: jetstream
+
+  nats:
+    # Stream replication is set to 1 by default. This is only recommended for development.
+    # For production a value of at least 3 is recommended for NATS JetStream to be resilient.
+    # See https://github.com/openfaas/openfaas-pro/blob/master/jetstream.md
+    streamReplication: 1
+    external:
+      clusterName: ""
+      enabled: false
+      host: ""
+      port: ""
+
+  ## Prometheus is required for metrics and autoscaling
+  ##
+  ## It is bundled into OpenFaaS to be used only as an internal component
+  ## if you wish to retain the metrics for a longer period, you should
+  ## scrape this instance from an external Prometheus server
+  prometheus:
+    image: prom/prometheus:v3.5.0
+    create: true
+    retention:
+      time: 15d
+    resources:
+      requests:
+        memory: "512Mi"
+        cpu: "100m"
+    annotations: {}
+    recordingRules: []
+
+    # Set to true to enable persistent storage for the Prometheus Pod
+    # otherwise, the data will be lost when the Pod is restarted
+    pvc:
+      enabled: false
+      # You may want to set this higher for production, or lower for development/staging.
+      size: 30Gi
+      # Leave the storageClassName blank for the default storage class
+      # using the string "default" does not necessarily mean the default
+      # storage class
+      storageClassName:
