@@ -1,0 +1,66 @@
+global:
+  commonLabels: {}
+  commonAnnotations: {}
+
+enabled: true 
+
+quota:
+  enabled: true
+  # Specification of the quotas resource
+  rules: |
+    hard:
+      persistentvolumeclaims: "0"
+      pods: "1"
+
+networkPolicy:
+  enabled: true
+  ingress:
+    traefikNamespace: traefik
+    traefikPodSelector:
+      matchLabels:
+        app.kubernetes.io/name: traefik
+        app.kubernetes.io/instance: traefik
+
+dashboard:
+  enabled: true
+  ingressUrl: whoami.example.com
+  middlewares:
+    - name: traefik-default-chain
+      namespace: traefik 
+
+  cert:
+    reflectedSecret:
+      enabled: true
+      originNamespace: cert-manager
+      originName: example-com-tls
+
+# https://github.com/cowboysysop/charts/blob/master/charts/whoami/values.yaml
+whoami:
+  enabled: true 
+
+  fullnameOverride: "test-whoami"
+  replicaCount: 1
+  service:
+    ## @param service.type Service type
+    type: ClusterIP
+
+    ## @param service.clusterIP Static cluster IP address or None for headless service when service type is ClusterIP
+    clusterIP:
+    # clusterIP: 10.43.0.100
+
+    ## @param service.loadBalancerIP Static load balancer IP address when service type is LoadBalancer
+    loadBalancerIP:
+    # loadBalancerIP: 10.0.0.100
+
+    ## @param service.loadBalancerSourceRanges Source IP address ranges when service type is LoadBalancer
+    loadBalancerSourceRanges:
+      # - 10.0.0.0/24
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+      
