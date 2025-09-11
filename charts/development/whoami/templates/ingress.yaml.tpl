@@ -32,7 +32,7 @@ spec:
         {{- end }}
       {{- end }}
       services:
-        - name: whoami.whoami-test
+        - name: whoami-test
           port: 80
   tls:
     secretName: {{ .Release.Name }}-tls
