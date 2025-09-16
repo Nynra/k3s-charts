@@ -29,6 +29,7 @@ networkPolicy:
 dashboard:
   enabled: true
   ingressUrl: jellyseerr.example.com
+  entrypoint: websecure
   middlewares:
     - name: traefik-default-chain
       namespace: traefik 

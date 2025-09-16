@@ -29,10 +29,10 @@ networkPolicy:
 dashboard:
   enabled: true
   ingressUrl: homarr.example.com
+  entrypoint: websecure
   middlewares:
     - name: traefik-default-chain
       namespace: traefik 
-
   cert:
     reflectedSecret:
       enabled: true
