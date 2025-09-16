@@ -32,7 +32,7 @@ spec:
         {{- end }}
       {{- end }}
       services:
-        - name: main
+        - name: {{ .Release.Name }}
           port: {{ .Values.homarr.service.main.port }}
   tls:
     secretName: {{ .Release.Name }}-tls
