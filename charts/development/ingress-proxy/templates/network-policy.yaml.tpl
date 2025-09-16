@@ -47,8 +47,8 @@ spec:
         - ipBlock:
             cidr: 0.0.0.0/0
       ports:
-        - port: {{ .Values.externalService.port }}
-          protocol: {{ .Values.externalService.protocol | quote }}
+        - port: {{ .Values.externalServer.port }}
+          protocol: {{ .Values.externalServer.protocol | quote }}
     - to:
         - podSelector: {}
 {{ end }}{{ end }}
