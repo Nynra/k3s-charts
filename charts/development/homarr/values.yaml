@@ -78,16 +78,12 @@ homarr:
 
   # Resource configuration
   resources: {}
-    # We usually recommend not to specify default resources and to leave this as a conscious
-    # choice for the user. This also increases chances charts run on environments with little
-    # resources, such as Minikube. If you do want to specify resources, uncomment the following
-    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
     # limits:
     #   cpu: 100m
     #   memory: 128Mi
     # requests:
     #   cpu: 100m
-  #   memory: 128Mi
+    #   memory: 128Mi
 
   database:
     # Enable external database
@@ -100,11 +96,11 @@ homarr:
     # The name of Auth OIDC existing secret
     authOidcCredentials:
       # -- Name of existing secret containing OIDC credentials
-      existingSecret: "auth-oidc-secret"
+      existingSecret: "app-homarr-oidc"
       # -- ID of OIDC client (application) secret key
-      oidcClientId: "oidc-client-id"
+      oidcClientId: "client-id"
       # -- Secret of OIDC client (application) secret key
-      oidcClientSecret: "oidc-client-secret"
+      oidcClientSecret: "client-secret"
 
   # Persistent storage configuration
   persistence:
@@ -140,26 +136,3 @@ homarr:
   ingress:
     # Disable ingress as we provide our own (traefik ingress)
     enabled: false
-  
-  # Old values for TrueCharts version
-  # workload:
-  #   main:
-  #     podSpec:
-  #       containers:
-  #         main:
-  #           env: {}
-
-  # resources:
-  #   limits:
-  #     cpu: 1000m
-  #     memory: 512Mi
-  #   requests:
-  #     cpu: 300m
-  #     memory: 256Mi
-  
-  # service:
-  #   main:
-  #     ports:
-  #       main:
-  #         port: 10245
-  #         targetPort: 7575
