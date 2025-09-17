@@ -1,11 +1,12 @@
-{{- if .Values.enabled }}{{- if .Values.quota.enabled }}
-kind: ResourceQuota
+{{- if .Values.enabled }}{{- if .Values.oidcClient.reflectedSecret.enabled }}
 apiVersion: v1
+kind: Secret
 metadata:
-  name: "app-homarr-quotas"
+  name: app-homarr-oidc
   namespace: {{ .Release.Namespace | quote }}
   annotations:
     argocd.argoproj.io/sync-wave: "1"
+    reflector.v1.k8s.emberstack.com/reflects: "{{ .Values.oidcClient.reflectedSecret.originNamespace }}/{{ .Values.oidcClient.reflectedSecret.originName }}"
     {{- if .Values.global.commonAnnotations }}
     # Global annotations
     {{- toYaml .Values.global.commonAnnotations | nindent 4 }}
@@ -15,6 +16,5 @@ metadata:
     # Global labels
     {{- toYaml .Values.global.commonLabels | nindent 4 }}
   {{- end }}
-spec: 
-  {{- .Values.quota.rules | nindent 2 }}
-{{- end }}{{- end }}
+---
+{{ end }}{{ end }}

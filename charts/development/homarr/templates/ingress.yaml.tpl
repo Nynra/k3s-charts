@@ -2,7 +2,7 @@
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
-  name: {{ .Release.Name }}-ingress
+  name: app-homarr-ingress
   namespace: {{ .Release.Namespace | quote }}
   annotations:
     kubernetes.io/ingress.class: traefik-external
@@ -32,8 +32,8 @@ spec:
         {{- end }}
       {{- end }}
       services:
-        - name: {{ .Release.Name }}
-          port: {{ .Values.homarr.service.main.ports.main.port }}
+        - name: app-homarr
+          port: {{ .Values.homarr.service.ports.app.port }}
   tls:
-    secretName: {{ .Release.Name }}-tls
+    secretName: app-homarr-tls
 {{- end }}{{- end }}
