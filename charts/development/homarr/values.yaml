@@ -28,6 +28,12 @@ oidcClient:
     originNamespace: default
     originName: auth-oidc-secret
 
+dbCredentials:
+  reflectedSecret:
+    enabled: true
+    originNamespace: default
+    originName: db-credentials
+
 quota:
   enabled: true
   # Specification of the quotas resource
@@ -64,17 +70,17 @@ homarr:
     # Time for the session to time out. Can be set as pure number, which will automatically be used in seconds, or followed by s, m, h or d for seconds, minutes, hours or days. (ex: "30m")
     AUTH_SESSION_EXPIRY_TIME: "1d"
     #  Issuer URI of OIDC provider without trailing slash (/)
-    AUTH_OIDC_ISSUER: "https://issuer.example.com"
+    # AUTH_OIDC_ISSUER: "https://issuer.example.com"
     # Display name of provider (in login screen)
-    AUTH_OIDC_CLIENT_NAME: "OIDC Provider"
+    # AUTH_OIDC_CLIENT_NAME: "OIDC Provider"
     # Automatically redirect to OIDC login
-    AUTH_OIDC_AUTO_LOGIN: true
+    # AUTH_OIDC_AUTO_LOGIN: true
     # Override the OIDC scopes
-    AUTH_OIDC_SCOPE_OVERWRITE: "openid email profile groups"
+    # AUTH_OIDC_SCOPE_OVERWRITE: "openid email profile groups"
     # Attribute used for groups (roles) claim
-    AUTH_OIDC_GROUPS_ATTRIBUTE: "groups"
+    # AUTH_OIDC_GROUPS_ATTRIBUTE: "groups"
     # Overwrite name attribute. By default, it will use preferred_username if it does not contain a @ and otherwise name.
-    AUTH_OIDC_NAME_ATTRIBUTE_OVERWRITE:
+    # AUTH_OIDC_NAME_ATTRIBUTE_OVERWRITE:
 
   # Resource configuration
   resources: {}
@@ -101,6 +107,20 @@ homarr:
       oidcClientId: "client-id"
       # -- Secret of OIDC client (application) secret key
       oidcClientSecret: "client-secret"
+    dbCredentials:
+      # Name of existing secret containing DB credentials
+      existingSecret: "db-credentials"
+      # Secret key for SECRET_ENCRYPTION_KEY
+      # can be generated with `openssl rand -hex 32`
+      dbEncryptionKey: "db-encryption-key"
+      # Only required 
+      # # Secret key for DB_URL
+      # # Example for internal database: `mysql://username:password@homarr-mysql:3306/homarrdb`
+      # dbUrlKey: "db-url"
+      # # Secret key for DB_PASSWORD
+      # dbPasswordKey: "mysql-root-password"
+      # # Secret key for database user
+      # dbUserPasswordKey: "mysql-password"
 
   # Persistent storage configuration
   persistence:
