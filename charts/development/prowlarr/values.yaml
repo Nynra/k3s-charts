@@ -14,7 +14,7 @@ quota:
   # Specification of the quotas resource
   rules: |
     hard:
-      persistentvolumeclaims: "1"
+      persistentvolumeclaims: "2"
       pods: "1"
 
 networkPolicy:
