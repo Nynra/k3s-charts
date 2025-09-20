@@ -1,0 +1,10 @@
+apiVersion: v2
+name: prowlarr-wrapper
+description: A Helm chart that deploys Prowlarr with ingress.
+type: application
+version: "0.0.1"
+dependencies:
+- name: prowlarr
+  version: "20.6.2"
+  repository: oci://tccr.io/truecharts
+  condition: prowlarr.enabled

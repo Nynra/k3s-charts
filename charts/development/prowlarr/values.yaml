@@ -1,0 +1,58 @@
+global:
+  commonLabels: {}
+  commonAnnotations: {}
+
+  # For TrueCharts charts so it doesnt try to take 200Gi of storage
+  fallbackDefaults:
+    pvcSize: 1Gi
+    vctSize: 1Gi
+
+enabled: true 
+
+quota:
+  enabled: true
+  # Specification of the quotas resource
+  rules: |
+    hard:
+      persistentvolumeclaims: "1"
+      pods: "1"
+
+networkPolicy:
+  enabled: true
+  ingress:
+    traefikNamespace: traefik
+    traefikPodSelector:
+      matchLabels:
+        app.kubernetes.io/name: traefik
+        app.kubernetes.io/instance: traefik
+
+dashboard:
+  enabled: true
+  ingressUrl: prowlarr.example.com
+  entrypoint: websecure
+  middlewares:
+    - name: traefik-default-chain
+      namespace: traefik 
+  cert:
+    reflectedSecret:
+      enabled: true
+      originNamespace: cert-manager
+      originName: example-com-tls
+
+# https://github.com/trueforge-org/truecharts/blob/master/charts/stable/prowlarr/values.yaml
+prowlarr:
+  enabled: true 
+
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 200m
+      memory: 256Mi
+  
+  service:
+    main:
+      ports:
+        main:
+          port: 9696
