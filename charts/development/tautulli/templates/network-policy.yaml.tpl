@@ -25,9 +25,9 @@ spec:
     - from:
         - namespaceSelector:
             matchLabels:
-              namespace: {{ .Values.networkPolicy.traefikNamespace | quote }}
+              namespace: {{ .Values.networkPolicy.ingress.traefikNamespace | quote }}
           podSelector:
-            {{ toYaml .Values.networkPolicy.traefikPodSelector | nindent 12 }}
+            {{ toYaml .Values.networkPolicy.ingress.traefikPodSelector | nindent 12 }}
   egress:
     - to:
         - namespaceSelector: {}
@@ -40,9 +40,9 @@ spec:
     - to:
         - namespaceSelector:
             matchLabels:
-              namespace: {{ .Values.networkPolicy.traefikNamespace | quote }}
+              namespace: {{ .Values.networkPolicy.ingress.traefikNamespace | quote }}
           podSelector:
-            {{ toYaml .Values.networkPolicy.traefikPodSelector | nindent 12 }}
+            {{ toYaml .Values.networkPolicy.ingress.traefikPodSelector | nindent 12 }}
     - to:
         - podSelector: {}
 {{ end }}{{ end }}

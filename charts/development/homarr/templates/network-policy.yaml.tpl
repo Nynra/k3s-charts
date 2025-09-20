@@ -2,7 +2,7 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: app-homarr-network-policy
+  name: {{ .Release.Name }}-network-policy
   namespace: {{ .Release.Namespace | quote }}
   annotations:
     argocd.argoproj.io/sync-wave: "1"
@@ -25,9 +25,9 @@ spec:
     - from:
         - namespaceSelector:
             matchLabels:
-              namespace: {{ .Values.networkPolicy.traefikNamespace | quote }}
+              namespace: {{ .Values.networkPolicy.ingress.traefikNamespace | quote }}
           podSelector:
-            {{ toYaml .Values.networkPolicy.traefikPodSelector | nindent 12 }}
+            {{ toYaml .Values.networkPolicy.ingress.traefikPodSelector | nindent 12 }}
   egress:
     - to:
         - namespaceSelector: {}
@@ -40,9 +40,9 @@ spec:
     - to:
         - namespaceSelector:
             matchLabels:
-              namespace: {{ .Values.networkPolicy.traefikNamespace | quote }}
+              namespace: {{ .Values.networkPolicy.ingress.traefikNamespace | quote }}
           podSelector:
-            {{ toYaml .Values.networkPolicy.traefikPodSelector | nindent 12 }}
+            {{ toYaml .Values.networkPolicy.ingress.traefikPodSelector | nindent 12 }}
     - to:
         - podSelector: {}
 {{ end }}{{ end }}
