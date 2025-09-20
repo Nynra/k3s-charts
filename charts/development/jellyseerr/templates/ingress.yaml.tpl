@@ -33,7 +33,7 @@ spec:
       {{- end }}
       services:
         - name: {{ .Release.Name }}
-          port: {{ .Values.jellyseerr.service.main.port }}
+          port: {{ .Values.jellyseerr.service.main.ports.main.port }}
   tls:
     secretName: {{ .Release.Name }}-tls
 {{- end }}{{- end }}

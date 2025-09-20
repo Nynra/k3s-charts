@@ -33,7 +33,7 @@ spec:
       {{- end }}
       services:
         - name: {{ .Release.Name }}
-          port: {{ .Values.tautulli.service.main.port }}
+          port: {{ .Values.tautulli.service.main.ports.main.port }}
   tls:
     secretName: {{ .Release.Name }}-tls
 {{- end }}{{- end }}
