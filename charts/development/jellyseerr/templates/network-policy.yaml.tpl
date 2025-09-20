@@ -25,7 +25,7 @@ spec:
     - from:
         - namespaceSelector:
             matchLabels:
-              namespace: {{ .Values.networkPolicy.ingress.traefikNamespace | quote }}
+              kubernetes.io/metadata.name: {{ .Values.networkPolicy.ingress.traefikNamespace | quote }}
           podSelector:
             {{ toYaml .Values.networkPolicy.ingress.traefikPodSelector | nindent 12 }}
   egress:
@@ -40,7 +40,7 @@ spec:
     - to:
         - namespaceSelector:
             matchLabels:
-              namespace: {{ .Values.networkPolicy.ingress.traefikNamespace | quote }}
+              kubernetes.io/metadata.name: {{ .Values.networkPolicy.ingress.traefikNamespace | quote }}
           podSelector:
             {{ toYaml .Values.networkPolicy.ingress.traefikPodSelector | nindent 12 }}
     - to:
