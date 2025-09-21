@@ -2,6 +2,8 @@ global:
   commonAnnotations: {}
   commonLabels: {}
 
+enabled: true
+
 adguardCredentials:
   externalSecret:
     enabled: false

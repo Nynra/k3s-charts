@@ -7,6 +7,8 @@ global:
     pvcSize: 2Gi
     vctSize: 2Gi
 
+enabled: true
+
 networkPolicy:
   enabled: false
   ingress:
