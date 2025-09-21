@@ -59,7 +59,7 @@ openfaas:
   serviceType: NodePort
 
   operator:
-    create: true
+    create: false
     leaderElection:
       enabled: true
 
