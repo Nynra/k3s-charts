@@ -1,6 +1,6 @@
 apiVersion: v2
-name: jellyseerr-wrapper
-description: A Helm chart that deploys Jellyseerr with ingress.
+name: openfaas-wrapper
+description: A Helm chart that deploys OpenFaaS with ingress.
 type: application
 version: "0.0.1"
 dependencies:
