@@ -32,7 +32,7 @@ spec:
         {{- end }}
       {{- end }}
       services:
-        - name: dashboard
+        - name: gateway
           port: 8080
   tls:
     secretName: {{ .Release.Name }}-tls
