@@ -1,4 +1,4 @@
-{{- if .Values.enabled }}{{- if .Values.gateway.enabled }}
+{{- if .Values.enabled }}{{- if .Values.functionGateway.enabled }}
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
