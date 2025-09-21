@@ -2,14 +2,6 @@ global:
   commonAnnotations: {}
   commonLabels: {}
 
-  # For adguard dns so it doesnt try to take 200Gi of storage
-  fallbackDefaults:
-    pvcSize: 2Gi
-    vctSize: 2Gi
-
-networkPolicy:
-  enabled: false
-
 adguardCredentials:
   externalSecret:
     enabled: false
@@ -24,46 +16,6 @@ adguardCredentials:
     enabled: true
     originNamespace: adguard
     originSecretName: adguard-configuration
-
-adguardDashboard:
-  enabled: false
-  ingressUrl: "adguardhome.example.com"
-  middlewares:
-    - name: traefik-default-chain 
-      namespace: traefik
-  entrypoint: websecure
-  cert:
-    externalSecret:
-      enabled: false
-      secretName: "example-com-tls"
-      secretStore: "certs-vault"
-      secretStoreType: "ClusterSecretStore"
-    reflectedSecret:
-      enabled: true
-      originNamespace: "external-secrets"
-      originSecretName: "example-com-tls"
-
-# https://github.com/trueforge-org/truecharts/blob/master/charts/stable/adguard-home/values.yaml
-adguard-home: 
-  enabled: false 
-  service: 
-    main: 
-      # Loadbalancer is usefull during setup or
-      # or if you want to expose to external services
-      # type: LoadBalancer
-      type: ClusterIP
-      loadBalancerIP: ""
-      # port: 8080
-      protocol: http
-
-  # Can be overruled per container
-  resources:
-    limits:
-      cpu: 500m
-      memory: 512Mi
-    requests:
-      cpu: 75m
-      memory: 200Mi
 
 external-dns:
   # Flag for the parent chart
@@ -135,11 +87,10 @@ external-dns:
         pullPolicy: IfNotPresent
       env:
         - name: ADGUARD_HOME_URL
-          value: "http://{{ .Release.Name }}-adguard-home.{{ .Release.Namespace}}:10232"
-          # valueFrom:
-          #   secretKeyRef:
-          #     name: adguard-configuration
-          #     key: url
+          valueFrom:
+            secretKeyRef:
+              name: adguard-configuration
+              key: url
         - name: ADGUARD_HOME_USER
           valueFrom:
             secretKeyRef:

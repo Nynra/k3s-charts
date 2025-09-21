@@ -1,9 +1,6 @@
 dependencies:
-- name: adguard-home
-  repository: oci://tccr.io/truecharts
-  version: 12.3.3
 - name: external-dns
   repository: https://kubernetes-sigs.github.io/external-dns/
   version: 1.18.0
-digest: sha256:4e5e9041fcfd5cd2e1d9dc6abdbbec451b43e4a68aa5c3983dee6fcd1aba4f7a
-generated: "2025-09-08T00:08:49.64588134+02:00"
+digest: sha256:ae4eefcc1d1c2c96cb528830b80ab0fe7eaec54a5122c46f441a3ede243ead6e
+generated: "2025-09-21T20:37:58.917459687+02:00"
