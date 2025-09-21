@@ -18,13 +18,13 @@ metadata:
   {{- end }}
 spec:
   entryPoints:
-    - {{ .Values.gateway.entrypoint | quote }}
+    - {{ .Values.functionGateway.entrypoint | quote }}
   routes:
-    - match: Host(`{{ .Values.gateway.ingressUrl }}`)
+    - match: Host(`{{ .Values.functionGateway.ingressUrl }}`)
       kind: Rule
-      {{- if .Values.gateway.middlewares }}
+      {{- if .Values.functionGateway.middlewares }}
       middlewares:
-        {{- range .Values.gateway.middlewares }}
+        {{- range .Values.functionGateway.middlewares }}
         - name: {{ .name | quote }}
           {{- if .namespace }}
           namespace: {{ .namespace | quote }}
