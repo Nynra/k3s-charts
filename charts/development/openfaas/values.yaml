@@ -29,6 +29,12 @@ networkPolicy:
         app.kubernetes.io/name: traefik
         app.kubernetes.io/instance: traefik
 
+cert:
+  reflectedSecret:
+    enabled: true
+    originNamespace: cert-manager
+    originName: example-com-tls
+
 dashboard:
   enabled: true
   ingressUrl: openfaas.example.com
@@ -37,11 +43,13 @@ dashboard:
     - name: traefik-default-chain
       namespace: traefik 
 
-  cert:
-    reflectedSecret:
-      enabled: true
-      originNamespace: cert-manager
-      originName: example-com-tls
+functionGateway:
+  enabled: false
+  ingressUrl: functions.example.com
+  entrypoint: websecure
+  middlewares:
+    - name: traefik-default-chain
+      namespace: traefik
 
 # https://github.com/openfaas/faas-netes/blob/master/chart/openfaas/values.yaml
 openfaas:

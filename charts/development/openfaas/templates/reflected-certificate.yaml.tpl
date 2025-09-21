@@ -6,7 +6,7 @@ metadata:
   namespace: {{ .Release.Namespace | quote }}
   annotations:
     argocd.argoproj.io/sync-wave: "1"
-    reflector.v1.k8s.emberstack.com/reflects: "{{ .Values.dashboard.cert.reflectedSecret.originNamespace }}/{{ .Values.dashboard.cert.reflectedSecret.originName }}"
+    reflector.v1.k8s.emberstack.com/reflects: "{{ .Values.cert.reflectedSecret.originNamespace }}/{{ .Values.cert.reflectedSecret.originName }}"
     {{- if .Values.global.commonAnnotations }}
     # Global annotations
     {{- toYaml .Values.global.commonAnnotations | nindent 4 }}
