@@ -35,13 +35,14 @@ cert:
     originNamespace: cert-manager
     originName: example-com-tls
 
-dashboard:
-  enabled: true
-  ingressUrl: openfaas.example.com
-  entrypoint: websecure
-  middlewares:
-    - name: traefik-default-chain
-      namespace: traefik 
+# Only supported for enterprise
+# dashboard:
+#   enabled: true
+#   ingressUrl: openfaas.example.com
+#   entrypoint: websecure
+#   middlewares:
+#     - name: traefik-default-chain
+#       namespace: traefik 
 
 functionGateway:
   enabled: false
@@ -69,10 +70,11 @@ openfaas:
   # serviceType for OpenFaaS gateway
   serviceType: NodePort
 
-  operator:
-    create: false
-    leaderElection:
-      enabled: true
+  # Only supported for enterprise
+  # operator:
+  #   create: false
+  #   leaderElection:
+  #     enabled: true
 
   gateway:
     replicas: 1
@@ -80,12 +82,13 @@ openfaas:
   autoscaler:
     enabled: true
 
-  dashboard:
-    enabled: true
-    publicURL: https://dashboard.example.com
-    # Name of signing key secret for sessions.
-    # Leave blank for development, see https://docs.openfaas.com/openfaas-pro/dashboard/ for production and staging.
-    signingKeySecret: ""
+  # Only supported for enterprise
+  # dashboard:
+  #   enabled: false
+  #   publicURL: https://dashboard.example.com
+  #   # Name of signing key secret for sessions.
+  #   # Leave blank for development, see https://docs.openfaas.com/openfaas-pro/dashboard/ for production and staging.
+  #   signingKeySecret: ""
 
   queueWorker:
     replicas: 3
