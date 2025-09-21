@@ -42,7 +42,7 @@ dashboard:
 
 # https://github.com/openfaas/faas-netes/blob/master/chart/openfaas/values.yaml
 openfaas:
-  enabled: true
+  enabled: false
 
   functionNamespace: openfaas-fn
   openfaasPro: false
