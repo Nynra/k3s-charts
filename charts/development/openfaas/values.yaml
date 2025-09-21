@@ -73,7 +73,7 @@ openfaas:
     enabled: true
 
   dashboard:
-    enabled: false
+    enabled: true
     publicURL: https://dashboard.example.com
     # Name of signing key secret for sessions.
     # Leave blank for development, see https://docs.openfaas.com/openfaas-pro/dashboard/ for production and staging.
