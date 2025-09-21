@@ -1,0 +1,6 @@
+dependencies:
+- name: adguard-home
+  repository: oci://tccr.io/truecharts
+  version: 12.3.3
+digest: sha256:0532ddf5fb5874fdcbb3c49dc0ee1f136f8117b49e157c7ea39b9bc67e0d1ae0
+generated: "2025-09-21T20:38:51.82940454+02:00"
