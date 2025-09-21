@@ -2,6 +2,8 @@ global:
   commonLabels: {}
   commonAnnotations: {}
 
+enabled: true
+
 coreQuota:
   enabled: false
   # Specification of the quotas resource
