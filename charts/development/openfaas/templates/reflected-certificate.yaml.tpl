@@ -1,4 +1,4 @@
-{{- if .Values.dashboard.cert.reflectedSecret.enabled }}
+{{- if .Values.cert.reflectedSecret.enabled }}
 apiVersion: v1
 kind: Secret
 metadata:
