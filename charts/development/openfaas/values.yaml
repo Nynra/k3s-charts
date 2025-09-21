@@ -32,6 +32,7 @@ networkPolicy:
 dashboard:
   enabled: true
   ingressUrl: openfaas.example.com
+  entrypoint: websecure
   middlewares:
     - name: traefik-default-chain
       namespace: traefik 
