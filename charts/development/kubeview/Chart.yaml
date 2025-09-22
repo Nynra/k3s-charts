@@ -1,0 +1,10 @@
+apiVersion: v2
+name: kubeview-wrapper
+description: A Helm chart that deploys kubeview.
+type: application
+version: "0.0.1"
+dependencies:
+- name: kubeview
+  version: 2.0.5
+  repository: https://code.benco.io/kubeview/deploy/helm
+  condition: kubeview.enabled

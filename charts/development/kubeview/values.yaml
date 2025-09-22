@@ -1,0 +1,67 @@
+global:
+  commonAnnotations: {}
+  commonLabels: {}
+
+enabled: true
+
+# networkPolicy:
+#   enabled: false
+#   ingress:
+#     traefikNamespace: traefik
+#     traefikPodSelector:
+#       matchLabels:
+#         app.kubernetes.io/name: traefik
+#         app.kubernetes.io/instance: traefik
+    
+dashboard:
+  enabled: false
+  ingressUrl: "adguardhome.example.com"
+  middlewares:
+    - name: traefik-default-chain 
+      namespace: traefik
+  entrypoint: websecure
+  cert:
+    reflectedSecret:
+      enabled: true
+      originNamespace: "external-secrets"
+      originSecretName: "example-com-tls"
+
+kubeview:
+  enabled: true 
+
+  # Configure single namespace mode:
+  # `false` - Show resources in all namespaces. This is the default.
+  # `true` - Show resources only in namespace Kubeview is installed to.
+  # "string" - Only show resources in the named namespace (can be *different* from the one Kubeview is installed to).
+  singleNamespace: false
+
+  # If you want to hide certain namespaces, use a regular expression here, e.g. `kube-\|aks-`
+  namespaceFilter: ''
+
+  # Set to true to enable debug mode, which outputs much more information in the logs
+  debug: false
+
+  ingress:
+    enabled: false
+
+  loadBalancer:
+    enabled: false
+    IP: ''
+
+  nodePort:
+    enabled: false
+    port: 30000
+
+  # This is for changing the resource limits and requests for the Kubeview pods
+  resources:
+    limits:
+      cpu: 50m
+      memory: 64Mi
+    requests:
+      cpu: 50m
+      memory: 64Mi
+
+  replicaCount: 1
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
