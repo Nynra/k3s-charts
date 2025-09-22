@@ -1,0 +1,6 @@
+dependencies:
+- name: part-db
+  repository: https://part-db.github.io/helm-charts
+  version: 0.1.2
+digest: sha256:1af27d634a69f3fa951c99b81e67de7f88f54c9ee618806e25f007be6169736c
+generated: "2025-09-22T21:54:26.559761301+02:00"
