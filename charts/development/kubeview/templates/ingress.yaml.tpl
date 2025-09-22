@@ -32,8 +32,8 @@ spec:
         {{- end }}
       {{- end }}
       services:
-        - name: "{{ .Release.Name }}-dashboard"
-          port: 8080
+        - name: {{ .Release.Name | quote }}
+          port: 8000
   tls:
     secretName: {{ .Release.Name }}-dashboard-tls
 {{- end }}{{- end }}
