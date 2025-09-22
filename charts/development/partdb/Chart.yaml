@@ -1,0 +1,10 @@
+apiVersion: v2
+name: partdb-wrapper
+description: A Helm chart that deploys partdb.
+type: application
+version: "0.0.1"
+dependencies:
+- name: partdb
+  version: 0.1.2
+  repository: https://part-db.github.io/helm-charts
+  condition: partdb.enabled

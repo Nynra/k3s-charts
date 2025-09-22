@@ -1,0 +1,58 @@
+global:
+  commonAnnotations: {}
+  commonLabels: {}
+
+enabled: true
+
+networkPolicy:
+  enabled: false
+  ingress:
+    traefikNamespace: traefik
+    traefikPodSelector:
+      matchLabels:
+        app.kubernetes.io/name: traefik
+        app.kubernetes.io/instance: traefik
+    
+dashboard:
+  enabled: false
+  ingressUrl: "adguardhome.example.com"
+  middlewares:
+    - name: traefik-default-chain 
+      namespace: traefik
+  entrypoint: websecure
+  cert:
+    reflectedSecret:
+      enabled: true
+      originNamespace: "external-secrets"
+      originSecretName: "example-com-tls"
+
+partdb:
+  enabled: true
+  nameOverride: ""
+  fullnameOverride: ""
+
+  app:
+    url: ""
+    lang: en
+    attachment_downloads: false
+    gravatar: false
+    currency: EUR
+    tz: "Europe/Amsterdam"
+    enforce_change_comments: "part_edit,part_delete,datastructure_edit,datastructure_delete"
+    # -- Whether to run initContainer for database initialization or upgrade
+    migrations: true
+
+  persistence:
+    enabled: true
+    size: 4Gi
+    existingClaim: ""
+    accessMode: ReadWriteOnce
+    annotations: {}
+    storageClassName: null
+
+  smtp:
+    host: ""
+    user: ""
+    password: ""
+    port: 587
+    protocol: smtps
