@@ -4,14 +4,14 @@ global:
 
 enabled: true
 
-# networkPolicy:
-#   enabled: false
-#   ingress:
-#     traefikNamespace: traefik
-#     traefikPodSelector:
-#       matchLabels:
-#         app.kubernetes.io/name: traefik
-#         app.kubernetes.io/instance: traefik
+networkPolicy:
+  enabled: false
+  ingress:
+    traefikNamespace: traefik
+    traefikPodSelector:
+      matchLabels:
+        app.kubernetes.io/name: traefik
+        app.kubernetes.io/instance: traefik
     
 dashboard:
   enabled: false
